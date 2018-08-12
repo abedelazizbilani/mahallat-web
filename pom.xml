@@ -74,10 +74,11 @@
 	    </dependency>
 	    
 	    <!-- MySQL -->
-	    <dependency>
-		    <groupId>mysql</groupId>
-		    <artifactId>mysql-connector-java</artifactId>
-	    </dependency>
+     <dependency>
+         <groupId>mysql</groupId>
+         <artifactId>mysql-connector-java</artifactId>
+         <version>5.1.34</version>
+     </dependency>
 	    
 	    <!-- Dev Tools -->
 	    <dependency>
@@ -85,7 +86,27 @@
                 <artifactId>spring-boot-devtools</artifactId>
                 <optional>true</optional>
         </dependency> 
-	    
+  	 <dependency>
+         <groupId>org.hibernate</groupId>
+         <artifactId>hibernate-core</artifactId>
+         <version>5.1.0.Final</version>
+     </dependency>
+ 
+     <!-- http://mvnrepository.com/artifact/org.hibernate/hibernate-entitymanager%20-->
+     <dependency>
+         <groupId>org.hibernate</groupId>
+         <artifactId>hibernate-entitymanager</artifactId>
+         <version>5.1.0.Final</version>
+     </dependency>
+ 
+ 
+     <!-- http://mvnrepository.com/artifact/org.hibernate/hibernate-c3p0%20-->
+     <dependency>
+         <groupId>org.hibernate</groupId>
+         <artifactId>hibernate-c3p0</artifactId>
+         <version>5.1.0.Final</version>
+     </dependency>
+ 
 	</dependencies>
 
 	<build>
