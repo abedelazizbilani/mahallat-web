@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.mahallat</groupId>
-	<artifactId>mahallat</artifactId>
-	<version>1.0</version>
+	<artifactId>mahallat-web</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>mahallat</name>
+	<name>mahallat-web</name>
 	<description>project for cycle c</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.0.4.RELEASE</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
 	<properties>
@@ -25,88 +26,61 @@
 	</properties>
 
 	<dependencies>
-		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web -->
-		<dependency>
-		    <groupId>org.springframework.boot</groupId>
-		    <artifactId>spring-boot-starter-web</artifactId>
-		    <version>2.0.4.RELEASE</version>
-		</dependency>
-
-		<!-- Web with Tomcat + Embed -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-tomcat</artifactId>
-			<scope>provided</scope>
+			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
-		
-		<!-- JSTL for JSP -->
 		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>jstl</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
-		
-		<!-- Need this to compile JSP -->
 		<dependency>
-			<groupId>org.apache.tomcat.embed</groupId>
-			<artifactId>tomcat-embed-jasper</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		
-		<!-- Need this to compile JSP, 
-			tomcat-embed-jasper version is not working, no idea why -->
-		<dependency>
-			<groupId>org.eclipse.jdt.core.compiler</groupId>
-			<artifactId>ecj</artifactId>
-			<version>4.6.1</version>
-			<scope>provided</scope>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
-		<!-- Optional, test for static content, bootstrap CSS-->
 		<dependency>
-			<groupId>org.webjars</groupId>
-			<artifactId>bootstrap</artifactId>
-			<version>3.3.7</version>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
 		</dependency>
-		<!-- JPA -->
 		<dependency>
-		    <groupId>org.springframework.boot</groupId>
-		    <artifactId>spring-boot-starter-data-jpa</artifactId>
-	    </dependency>
-	    
-	    <!-- MySQL -->
-     <dependency>
-         <groupId>mysql</groupId>
-         <artifactId>mysql-connector-java</artifactId>
-         <version>5.1.34</version>
-     </dependency>
-	    
-	    <!-- Dev Tools -->
-	    <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-devtools</artifactId>
-                <optional>true</optional>
-        </dependency> 
-  	 <dependency>
-         <groupId>org.hibernate</groupId>
-         <artifactId>hibernate-core</artifactId>
-         <version>5.1.0.Final</version>
-     </dependency>
- 
-     <!-- http://mvnrepository.com/artifact/org.hibernate/hibernate-entitymanager%20-->
-     <dependency>
-         <groupId>org.hibernate</groupId>
-         <artifactId>hibernate-entitymanager</artifactId>
-         <version>5.1.0.Final</version>
-     </dependency>
- 
- 
-     <!-- http://mvnrepository.com/artifact/org.hibernate/hibernate-c3p0%20-->
-     <dependency>
-         <groupId>org.hibernate</groupId>
-         <artifactId>hibernate-c3p0</artifactId>
-         <version>5.1.0.Final</version>
-     </dependency>
- 
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.6</version>
+		</dependency>
+
+
+
+		<!-- Hibernate -->
+		<!-- http://mvnrepository.com/artifact/org.hibernate/hibernate-core%20 -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>5.1.0.Final</version>
+		</dependency>
+
+		<!-- http://mvnrepository.com/artifact/org.hibernate/hibernate-entitymanager%20 -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>5.1.0.Final</version>
+		</dependency>
+
+
+		<!-- http://mvnrepository.com/artifact/org.hibernate/hibernate-c3p0%20 -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-c3p0</artifactId>
+			<version>5.1.0.Final</version>
+		</dependency>
 	</dependencies>
 
 	<build>

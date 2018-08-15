@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.bytecode.use_reflection_optimizer">false</property>
+        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/mahallat</property>
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+        <property name="hibernate.search.autoregister_listeners">true</property>
+        <property name="hibernate.validator.apply_to_ddl">false</property>
+        <mapping class="com.mahallat.entity.StoreRating"/>
+        <mapping class="com.mahallat.entity.User"/>
+        <mapping class="com.mahallat.entity.Settings"/>
+        <mapping class="com.mahallat.entity.Category"/>
+        <mapping class="com.mahallat.entity.Store"/>
+        <mapping class="com.mahallat.entity.ProductRating"/>
+        <mapping class="com.mahallat.entity.Role"/>
+        <mapping class="com.mahallat.entity.Offers"/>
+        <mapping class="com.mahallat.entity.Product"/>
+        <mapping class="com.mahallat.entity.Gallery"/>
+        <mapping class="com.mahallat.entity.StoreLike"/>
+        <mapping class="com.mahallat.entity.Comment"/>
+        <mapping class="com.mahallat.entity.ProductLike"/>
+    </session-factory>
+</hibernate-configuration>
