@@ -2,11 +2,16 @@ package com.mahallat.dao;
 
 import java.util.List; 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.springframework.stereotype.Repository;
 import com.mahallat.entity.Store;
+import org.springframework.transaction.annotation.Transactional;
 
-@Repository
+@Transactional
+@Repository("storeDao")
 public class StoreDao implements IStoreDao {
+	@PersistenceContext
 	private EntityManager entityManager;	
 	@Override
 	public Store one(int id) {
@@ -15,7 +20,7 @@ public class StoreDao implements IStoreDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Store> getAllStores() {
-		String hql = "FROM Sotre as store ORDER BY store.id";
+		String hql = "FROM Store as store";
 		return (List<Store>) entityManager.createQuery(hql).getResultList();
 	}
 }

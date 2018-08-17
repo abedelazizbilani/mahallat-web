@@ -14,12 +14,4 @@ public class UserDao implements IUserDao {
 	@PersistenceContext
 	private EntityManager entityManager;
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<User> getAllUsers() {
-		String hql = "From User as usr where usr.active=1";
-		return (List<User>) entityManager.createQuery(hql).getResultList();
-	}
-	
-	
 }

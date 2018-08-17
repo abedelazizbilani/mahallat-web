@@ -15,7 +15,7 @@ import com.mahallat.entity.Store;
 import com.mahallat.services.IStoreService;
 
 @RestController
-@RequestMapping(value = "/store")
+@RequestMapping(value = "api")
 @CrossOrigin
 public class StoreController {
 	@Autowired
@@ -27,7 +27,7 @@ public class StoreController {
 		return new ResponseEntity<Store>(store, HttpStatus.OK);
 	}
 
-	@GetMapping
+	@GetMapping("stores")
 	public ResponseEntity<List<Store>> getAllStores() {
 		List<Store> list = storeService.getAllStores();
 		return new ResponseEntity<List<Store>>(list, HttpStatus.OK);

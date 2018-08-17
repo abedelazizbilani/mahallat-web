@@ -21,10 +21,4 @@ import com.mahallat.services.IUserService;
 public class UserController {
 	@Autowired
 	private IUserService userService;
-
-	@GetMapping
-	public ResponseEntity<List<User>> getAllUsers() {
-		List<User> list = userService.getAllUsers();
-		return new ResponseEntity<List<User>>(list, HttpStatus.OK);
-	}
 }
