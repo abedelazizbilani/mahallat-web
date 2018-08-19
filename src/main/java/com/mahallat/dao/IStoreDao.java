@@ -1,8 +1,15 @@
 package com.mahallat.dao;
 import java.util.List;
-import com.mahallat.entity.Store;;
 
-public interface IStoreDao {
+import com.mahallat.base.BaseDao;
+import com.mahallat.entity.Product;
+import com.mahallat.entity.Store;
+import com.mahallat.entity.StoreRating;;
+
+public interface IStoreDao extends BaseDao{
 	List<Store> getAllStores();
 	Store one(int id);
+	List<Product> getAllProductsByStoreId(int id);
+	void rate(StoreRating storeRating);
+	boolean ratingExist(int user_id, int store_id);
 }

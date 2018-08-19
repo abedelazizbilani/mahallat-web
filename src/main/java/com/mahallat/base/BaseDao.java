@@ -1,5 +1,6 @@
 package com.mahallat.base;
 
-public class BaseDao {
+import org.springframework.lang.Nullable;
 
+public interface BaseDao {
 }

@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Implementation-Title: mahallat-web
 Implementation-Version: 0.0.1-SNAPSHOT
-Built-By: abed.bilani
+Built-By: Abed Bilani
 Implementation-Vendor-Id: com.mahallat
-Build-Jdk: 1.8.0_181
+Build-Jdk: 1.8.0_25
 Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
  ot-starter-parent/mahallat-web
 Created-By: Maven Integration for Eclipse
