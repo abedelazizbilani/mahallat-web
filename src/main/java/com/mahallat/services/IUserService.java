@@ -4,4 +4,5 @@ import java.util.List;
 import com.mahallat.entity.User;
 
 public interface IUserService {
+	User findOne(String username);
 }

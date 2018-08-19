@@ -1,8 +1,10 @@
 package com.mahallat.dao;
 
-import java.util.List;
-
 import com.mahallat.entity.User;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
-public interface IUserDao {
+@Repository
+public interface IUserDao extends CrudRepository<User, Integer> {
+	User findByUsername(String username);
 }

@@ -41,6 +41,8 @@ public class User implements java.io.Serializable {
 	private String lastname;
 	private Date createdAt;
 	private Date updatedAt;
+	
+	private String password;
 	@JsonIgnore
 	private Set<ProductRating> productRatings = new HashSet<ProductRating>(0);
 	@JsonIgnore
@@ -149,6 +151,14 @@ public class User implements java.io.Serializable {
 	public void setLastname(String lastname) {
 		this.lastname = lastname;
 	}
+	
+	@Column(name = "password")
+    public String getPassword() {
+        return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
 	@Temporal(TemporalType.DATE)
 	@Column(name = "created_at", length = 10)
