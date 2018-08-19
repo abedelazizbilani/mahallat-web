@@ -6,7 +6,7 @@ import com.mahallat.entity.Product;
 import com.mahallat.entity.Store;
 import com.mahallat.entity.StoreRating;;
 
-public interface IStoreDao extends BaseDao{
+public interface IStoreDao{
 	List<Store> getAllStores();
 	Store one(int id);
 	List<Product> getAllProductsByStoreId(int id);

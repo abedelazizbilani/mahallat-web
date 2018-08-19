@@ -32,8 +32,8 @@ public class CategoryController {
 		return new ResponseEntity<List<Category>>(list, HttpStatus.OK);
 	}
 	
-	@GetMapping("category/{id}/stores")
-	public ResponseEntity<Category> getAllStoresByCategoryid(@PathVariable("id") int id){
+	@GetMapping("category/{id}")
+	public ResponseEntity<Category> one(@PathVariable("id") int id){
 		Category category = categoryService.one(id);
 		if(category == null ) {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
