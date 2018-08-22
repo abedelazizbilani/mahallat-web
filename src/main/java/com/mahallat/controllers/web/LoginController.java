@@ -24,10 +24,9 @@ public class LoginController {
 	private UserService userService;
 
 	@GetMapping(value = { "/", "/login" })
-	public ModelAndView login() {
+	public String login() {
 		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("login");
-		return modelAndView;
+		return "login";
 	}
 
 	@GetMapping(value = "/registration")
@@ -60,13 +59,14 @@ public class LoginController {
 	}
 
 	@GetMapping(value="/admin/home")
-	public String home(){
-//		ModelAndView modelAndView = new ModelAndView();
-//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//		User user = userService.findUserByEmail(auth.getName());
-//		modelAndView.addObject("userName", "Welcome " + user.getName() + " " + " (" + user.getEmail() + ")");
-//		modelAndView.addObject("adminMessage","Content Available Only for Users with Admin Role");
-		return "layout";
+	public ModelAndView home(){
+		ModelAndView modelAndView = new ModelAndView();
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = userService.findUserByEmail(auth.getName());
+		modelAndView.addObject("userName", "Welcome " + user.getName() + " " + " (" + user.getEmail() + ")");
+		modelAndView.addObject("adminMessage","Content Available Only for Users with Admin Role");
+		modelAndView.setViewName("admin/home");
+		return modelAndView;
 	}
 
 }

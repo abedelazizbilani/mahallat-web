@@ -1,36 +1,46 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org">
-
-<head>
-	<title>Spring Security Tutorial</title>
-	<link rel="stylesheet" type="text/css" th:href="@{/css/login.css}" />
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-</head>
-
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layouts/layout.html}" xmlns:th="http://www.thymeleaf.org">
+<head th:include="layouts/layout :: htmlhead" th:with="title='Login'"></head>
 <body>
-	<form th:action="@{/registration}" method="get">
-		<button class="btn btn-md btn-warning btn-block" type="Submit">Go To Registration Page</button>
-	</form>	
-	
-	<div class="container">
-		<img th:src="@{/images/login.jpg}" class="img-responsive center-block" width="300" height="300" alt="Logo" />
-		<form th:action="@{/login}" method="POST" class="form-signin">
-			<h3 class="form-signin-heading" th:text="Welcome"></h3>
-			<br/>
-			 
-			<input type="text" id="email" name="email"  th:placeholder="Email"
-				class="form-control" /> <br/> 
-			<input type="password"  th:placeholder="Password"
-				id="password" name="password" class="form-control" /> <br /> 
-				
-			<div align="center" th:if="${param.error}">
-				<p style="font-size: 20; color: #FF1C19;">Email or Password invalid, please verify</p>
+	<div layout:fragment="main-container">
+		<div class="content">
+			<div class="container-fluid">
+				<div class="offset-md-4 col-md-4">
+					<div class="card">
+						<div class="card-header card-header-primary">
+							<h4 class="card-title">Login</h4>
+						</div>
+						<div class="card-body ">
+							<form th:action="@{/login}" method="POST">
+								<span class="bmd-form-group"> </span>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label class="bmd-label-floating">Email address</label> 
+											<input type="email" id="email" name="email"  class="form-control">
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label class="bmd-label-floating">Password</label> <input name="password" type="password" class="form-control">
+										</div>
+									</div>
+								</div>
+								<div class="card-footer justify-content-center">
+									<button type="submit" class="btn btn-primary pull-right">Login</button>
+								</div>
+								<div class="card-footer justify-content-center">
+									<a href="/registration" class="btn btn-rose btn-link btn-lg">Register</a>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
 			</div>
-			<button class="btn btn-lg btn-primary btn-block" name="Submit" value="Login" type="Submit" th:text="Login"></button>
-		</form>
+		</div>
 	</div>
+	<div th:include="layouts/layout :: footer" id="footer">(footer)</div>
 </body>
 </html>
