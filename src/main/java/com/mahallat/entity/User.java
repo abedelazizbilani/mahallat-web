@@ -11,12 +11,15 @@ import javax.persistence.GeneratedValue;
 import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
+import javax.persistence.CascadeType;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -36,7 +39,7 @@ public class User implements java.io.Serializable {
 	private Role role;
 	private String username;
 	private String email;
-	private Byte active;
+	private Integer active;
 	private String name;
 	private String lastname;
 	private Date createdAt;
@@ -55,6 +58,7 @@ public class User implements java.io.Serializable {
 	private Set<ProductLike> productLikes = new HashSet<ProductLike>(0);
 	@JsonIgnore
 	private Set<Store> stores = new HashSet<Store>(0);
+	private Set<Role> roles;
 
 	public User() {
 	}
@@ -65,7 +69,7 @@ public class User implements java.io.Serializable {
 		this.email = email;
 	}
 
-	public User(Role role, String username, String email, Byte active, String name, String lastname, Date createdAt,
+	public User(Role role, String username, String email, Integer active, String name, String lastname, Date createdAt,
 			Date updatedAt, Set<ProductRating> productRatings, Set<StoreLike> storeLikes, Set<StoreRating> storeRatings,
 			Set<Comment> comments, Set<ProductLike> productLikes, Set<Store> stores) {
 		this.role = role;
@@ -96,15 +100,17 @@ public class User implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JsonManagedReference
-	@JoinColumn(name = "role_id", nullable = false)
-	public Role getRole() {
-		return this.role;
+	@ManyToMany(cascade=CascadeType.DETACH, fetch=FetchType.LAZY) //delete user and user_role, not delete role	
+	@JoinTable(name = "user_role", 
+		joinColumns = { @JoinColumn(name = "user_id",  nullable = false) }, 
+		inverseJoinColumns = { @JoinColumn(name = "role_id",  nullable = false) })
+
+	public Set<Role> getRoles() {
+		return roles;
 	}
 
-	public void setRole(Role role) {
-		this.role = role;
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
 	}
 
 	@Column(name = "username", unique = true, nullable = false)
@@ -126,11 +132,11 @@ public class User implements java.io.Serializable {
 	}
 
 	@Column(name = "active")
-	public Byte getActive() {
+	public Integer getActive() {
 		return this.active;
 	}
 
-	public void setActive(Byte active) {
+	public void setActive(Integer active) {
 		this.active = active;
 	}
 

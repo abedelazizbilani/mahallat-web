@@ -10,6 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -33,9 +34,9 @@ public class Role implements java.io.Serializable {
 	private String description;
 	private String code;
 	private byte active;
+	private Set<User> users = new HashSet<User>(0);
 	private Date createdAt;
 	private Date updatedAt;
-	private Set<User> users = new HashSet<User>(0);
 
 	public Role() {
 	}
@@ -126,7 +127,17 @@ public class Role implements java.io.Serializable {
 		this.updatedAt = updatedAt;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "role")
+//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "role")
+//	@JsonBackReference
+//	public Set<User> getUsers() {
+//		return this.users;
+//	}
+//
+//	public void setUsers(Set<User> users) {
+//		this.users = users;
+//	}
+	
+	@ManyToMany(mappedBy = "roles")	
 	@JsonBackReference
 	public Set<User> getUsers() {
 		return this.users;
