@@ -3,6 +3,7 @@ package com.mahallat.controllers.web;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -24,9 +25,18 @@ public class LoginController {
 	private UserService userService;
 
 	@GetMapping(value = { "/", "/login" })
-	public String login() {
+	public ModelAndView login(){
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+		if (!(auth instanceof AnonymousAuthenticationToken)) {
+
+		    /* The user is logged in :) */
+		    return new ModelAndView("redirect:/admin/home");
+		}
+		
 		ModelAndView modelAndView = new ModelAndView();
-		return "login";
+		modelAndView.setViewName("login");
+		return modelAndView;
 	}
 
 	@GetMapping(value = "/registration")
