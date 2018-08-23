@@ -1,73 +1,86 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layouts/layout.html}" xmlns:th="http://www.thymeleaf.org">
-<head th:include="layouts/layout :: htmlhead" th:with="title='Login'"></head>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layouts/layout.html}"
+	xmlns:th="http://www.thymeleaf.org">
+<head th:include="layouts/layout :: htmlhead" th:with="title='Register'"></head>
 <body>
-	<form th:action="@{/}" method="get">
-		<button class="btn btn-md btn-warning btn-block" type="Submit">Go To Login Page</button>
-	</form>	
-	
-	<div class="container">
-		<div class="row">
-			<div class="col-md-6 col-md-offset-3">
-				<form autocomplete="off" action="#" th:action="@{/registration}"
-					th:object="${user}" method="post" class="form-horizontal"
-					role="form">
-					<h2>Registration Form</h2>
-					<div class="form-group">
-						<div class="col-sm-9">
-						<label th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
-								class="validation-message"></label>
-						<input type="text" th:field="*{name}" placeholder="Name"
-								class="form-control" /> 
+	<div layout:fragment="main-container">
+		<div class="content">
+			<div class="container-fluid">
+				<div class="offset-md-4 col-md-4">
+					<div class="card">
+						<div class="card-header card-header-primary">
+							<h4 class="card-title">Register</h4>
 						</div>
-					</div>
+						<div class="card-body ">
+							<form th:action="@{/registration}" method="POST">
+								<span class="bmd-form-group"> </span>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label class="bmd-label-floating">Name</label> <input
+												type="text" id="name" th:field="*{user.name}"
+												class="form-control"> <label
+												th:if="${#fields.hasErrors('user.name')}"
+												th:errors="*{user.name}" class="validation-message"></label>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label class="bmd-label-floating">Last Name</label> <input
+												type="text" th:field="*{user.lastname}" class="form-control" />
+											<label th:if="${#fields.hasErrors('user.lastname')}"
+												th:errors="*{user.lastname}" class="validation-message"></label>
 
-					<div class="form-group">
-						<div class="col-sm-9">
-						<label	th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}"
-								class="validation-message"></label>
-							<input type="text" th:field="*{lastname}"
-								placeholder="Last Name" class="form-control" /> 
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label class="bmd-label-floating">Username</label> <input
+												type="text" th:field="*{user.username}" class="form-control" />
+											<label th:if="${#fields.hasErrors('user.username')}"
+												th:errors="*{user.username}" class="validation-message"></label>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label class="bmd-label-floating"> Email </label> <input
+												type="text" th:field="*{user.email}" class="form-control" />
+											<label th:if="${#fields.hasErrors('user.email')}"
+												th:errors="*{user.email}" class="validation-message"></label>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="form-group">
+											<label class="bmd-label-floating">Password</label> <input
+												type="password" th:field="*{user.password}"
+												class="form-control" /> <label
+												th:if="${#fields.hasErrors('user.password')}"
+												th:errors="*{user.password}" class="validation-message"></label>
+										</div>
+									</div>
+								</div>
+								<div class="card-footer justify-content-center">
+									<button type="submit" class="btn btn-primary pull-right">Submit</button>
+								</div>
+								<div class="card-footer justify-content-center">
+									<a href="/Login" class="btn btn-rose btn-link btn-lg">Login</a>
+								</div>
+							</form>
 						</div>
 					</div>
-					<div class="form-group">
-						<div class="col-sm-9">
-						<label	th:if="${#fields.hasErrors('username')}" th:errors="*{username}"
-								class="validation-message"></label>
-							<input type="text" th:field="*{username}"
-								placeholder="Last Name" class="form-control" /> 
-						</div>
-					</div>
-					<div class="form-group">
-						<div class="col-sm-9">
-							<input type="text" th:field="*{email}" placeholder="Email"
-								class="form-control" /> <label
-								th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
-								class="validation-message"></label>
-						</div>
-					</div>
-					<div class="form-group">
-						<div class="col-sm-9">
-							<input type="password" th:field="*{password}"
-								placeholder="Password" class="form-control" /> <label
-								th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
-								class="validation-message"></label>
-						</div>
-					</div>
-
-					<div class="form-group">
-						<div class="col-sm-9">
-							<button type="submit" class="btn btn-primary btn-block">Register User</button>
-						</div>
-					</div>
-					
-					<span th:utext="${successMessage}"></span>
-					
-					
-				</form>
+				</div>
 			</div>
 		</div>
 	</div>
-
+	<div th:include="layouts/layout :: footer" id="footer">(footer)</div>
 </body>
 </html>
