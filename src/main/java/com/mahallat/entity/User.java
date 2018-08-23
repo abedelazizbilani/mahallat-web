@@ -1,6 +1,7 @@
 package com.mahallat.entity;
 // Generated Aug 15, 2018 4:23:34 AM by Hibernate Tools 5.1.8.Final
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -13,12 +14,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
 import org.springframework.data.annotation.CreatedDate;
@@ -40,16 +41,20 @@ public class User implements java.io.Serializable {
 
 	private Integer id;
 	private Role role;
-	@NotEmpty(message="*Please provide your name.")
+	@NotEmpty(message="*Please provide your username.")
 	private String username;
+	@NotEmpty(message="Please provide an email")
+	@Email
 	private String email;
 	private Integer active;
 	@NotEmpty(message = "*Please provide your name.")
 	private String name;
+	@NotEmpty(message="*Please provide your lastname.")
 	private String lastname;
+	@CreatedDate
 	private Date createdAt;
 	private Date updatedAt;
-	
+	@NotEmpty(message="Provide a password.")
 	private String password;
 	@JsonIgnore
 	private Set<ProductRating> productRatings = new HashSet<ProductRating>(0);
@@ -74,8 +79,8 @@ public class User implements java.io.Serializable {
 		this.email = email;
 	}
 
-	public User(Role role, String username, String email, Integer active, String name, String lastname, Date createdAt,
-			Date updatedAt, Set<ProductRating> productRatings, Set<StoreLike> storeLikes, Set<StoreRating> storeRatings,
+	public User(Role role, String username, String email, Integer active, String name, String lastname, Timestamp createdAt,
+			Timestamp updatedAt, Set<ProductRating> productRatings, Set<StoreLike> storeLikes, Set<StoreRating> storeRatings,
 			Set<Comment> comments, Set<ProductLike> productLikes, Set<Store> stores) {
 		this.role = role;
 		this.username = username;
@@ -172,7 +177,6 @@ public class User implements java.io.Serializable {
     }
 
 	@Temporal(TemporalType.DATE)
-	@CreatedDate
 	@Column(name = "created_at", length = 10)
 	public Date getCreatedAt() {
 		return this.createdAt;

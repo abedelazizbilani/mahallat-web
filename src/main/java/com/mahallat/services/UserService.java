@@ -1,6 +1,9 @@
 package com.mahallat.services;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.HashSet;
 
@@ -23,10 +26,10 @@ import com.mahallat.entity.User;
 public class UserService implements UserDetailsService, IUserService {
 	@Autowired
 	private IUserDao userDAO;
-	
+
 	@Autowired
 	private IRoleDao roleDao;
-	
+
 	@Override
 	public User findOne(String username) {
 		return userDAO.findByUsername(username);
@@ -57,9 +60,10 @@ public class UserService implements UserDetailsService, IUserService {
 	@Override
 	public void saveUser(User user) {
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        user.setActive(1);
-        Role userRole = roleDao.findByName("ADMIN");
-        user.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
+		user.setActive(0);
+		user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+		Role userRole = roleDao.findByName("STORE");
+		user.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
 		userDAO.save(user);
 	}
 }

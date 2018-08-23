@@ -27,13 +27,9 @@ public class LoginController {
 	@GetMapping(value = { "/", "/login" })
 	public ModelAndView login(){
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
 		if (!(auth instanceof AnonymousAuthenticationToken)) {
-
-		    /* The user is logged in :) */
-		    return new ModelAndView("redirect:/admin/home");
+		    return new ModelAndView("redirect:admin/dashboard");
 		}
-		
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("login");
 		return modelAndView;
@@ -67,16 +63,4 @@ public class LoginController {
 		}
 		return modelAndView;
 	}
-
-	@GetMapping(value="/admin/home")
-	public ModelAndView home(){
-		ModelAndView modelAndView = new ModelAndView();
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		User user = userService.findUserByEmail(auth.getName());
-		modelAndView.addObject("userName", "Welcome " + user.getName() + " " + " (" + user.getEmail() + ")");
-		modelAndView.addObject("adminMessage","Content Available Only for Users with Admin Role");
-		modelAndView.setViewName("admin/home");
-		return modelAndView;
-	}
-
 }
