@@ -69,6 +69,7 @@ public class User implements java.io.Serializable {
 	@JsonIgnore
 	private Set<Store> stores = new HashSet<Store>(0);
 	private Set<Role> roles;
+	private String image;
 
 	public User() {
 	}
@@ -175,6 +176,16 @@ public class User implements java.io.Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
+    
+    @Column(name = "image")
+	public String getImage() {
+		return this.image;
+	}
+    
+    public void setImage(String image) {
+    	this.image = image;
+    }
+    
 
 	@Temporal(TemporalType.DATE)
 	@Column(name = "created_at", length = 10)

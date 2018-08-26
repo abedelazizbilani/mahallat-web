@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.HashSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,11 @@ public class UserService implements UserDetailsService, IUserService {
 	@Override
 	public User findOne(String username) {
 		return userDAO.findByUsername(username);
+	}
+
+	@Override
+	public User findById(Integer id) {
+		return userDAO.findOne(id);
 	}
 
 	@Override
@@ -66,4 +72,17 @@ public class UserService implements UserDetailsService, IUserService {
 		user.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
 		userDAO.save(user);
 	}
+
+	@Override
+	public boolean updateUser(User user) {
+		user.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+		userDAO.save(user);
+		return true;
+	}
+
+	@Override
+	public List<User> findStoreUsers() {
+		return userDAO.findStoreUsers();
+	}
+
 }

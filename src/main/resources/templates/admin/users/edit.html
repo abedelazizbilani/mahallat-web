@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layouts/adminpannellayout.html}" xmlns:th="http://www.thymeleaf.org">
+<head th:include="layouts/admin-pannel-layout :: htmlhead" th:with="title=${user.name}"></head>
+<body>
+	<div class="wrapper">
+		<div th:include="layouts/admin-pannel-layout :: sidebar"></div>
+		<div class="main-panel ps-container ps-theme-default ps-active-y" layout:fragment="main-pannel">
+			<nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
+				<div class="container-fluid">
+					<div class="navbar-wrapper">
+						<a class="navbar-brand" href="#pablo">Users List</a>
+					</div>
+				</div>
+			</nav>
+			<div class="content">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-md-8">
+							<div class="card">
+								<div class="card-header card-header-primary">
+									<h4 class="card-title">Edit Profile</h4>
+									<p class="card-category">Complete your profile</p>
+								</div>
+								<div class="card-body">
+									<form method="post" th:action="@{/admin/dashboard/user/edit}">
+										<div class="row">
+											<div class="col-md-6">
+												<div class="form-group">
+													<label class="bmd-label-floating">Username</label> <input type="text" th:field="*{user.username}" class="form-control" /> <label
+														th:if="${#fields.hasErrors('user.username')}" th:errors="*{user.username}" class="validation-message"></label>
+												</div>
+											</div>
+											<div class="col-md-6">
+												<div class="form-group">
+													<label th:text="${user.email}" class="bmd-label-floating">Email address</label> <input type="email" class="form-control" disabled>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-6">
+												<div class="form-group">
+													<label class="bmd-label-floating">Name</label> <input type="text" id="name" th:field="*{user.name}" class="form-control"> <label
+														th:if="${#fields.hasErrors('user.name')}" th:errors="*{user.name}" class="validation-message"></label>
+												</div>
+											</div>
+											<div class="col-md-6">
+												<div class="form-group">
+													<label class="bmd-label-floating">Last Name</label> <input type="text" id="lastname" th:field="*{user.lastname}" class="form-control"> <label
+														th:if="${#fields.hasErrors('user.lastname')}" th:errors="*{user.lastname}" class="validation-message"></label>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-4">
+												<div class="file-field">
+													<div class="btn custom-file btn-primary pull-left">
+														<i class="material-icons"> cloud_upload </i> <input class="custom-file-input" type="file"></input>
+													</div>
+												</div>
+											</div>
+											<div class="col-md-8">
+												<div class="file-path-wrapper">
+													<label class="bmd-label-floating">File Path</label> <input th:value="${user.image}" type="text" placeholder="Upload your file" class="form-control">
+												</div>
+											</div>
+										</div>
+										<input th:value="${user.id}" th:field="*{user.id}" type="hidden" class="hidden">
+										<button type="submit" class="btn btn-primary pull-right">Update Profile</button>
+										<div class="clearfix"></div>
+									</form>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="card card-profile">
+								<div class="card-avatar">
+									<a href="#pablo"> <img class="img" th:src="@{${'/users/images/' + user.image}}" />
+									</a>
+								</div>
+								<div class="card-body">
+									<h6 class="card-category text-gray">ROLE</h6>
+									<h4 th:text="${user.name + ' ' + user.lastname}" class="card-title">Alec Thompson</h4>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div th:include="layouts/admin-pannel-layout :: footer"></div>
+	</div>
+	</div>
+</body>
+</html>
