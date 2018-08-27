@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layouts/adminpannellayout.html}" xmlns:th="http://www.thymeleaf.org">
+<head th:include="layouts/admin-pannel-layout :: htmlhead" th:with="title=${store.name}"></head>
+<body>
+	<div class="wrapper">
+		<div th:include="layouts/admin-pannel-layout :: sidebar"></div>
+		<div class="main-panel ps-container ps-theme-default ps-active-y" layout:fragment="main-pannel">
+			<nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
+				<div class="container-fluid">
+					<div class="navbar-wrapper">
+						<a class="navbar-brand" href="#pablo">My Store</a>
+					</div>
+				</div>
+			</nav>
+			<div class="content">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-md-8">
+							<div class="card">
+								<div class="card-header card-header-primary">
+									<h4 class="card-title">Add my Store</h4>
+								</div>
+								<div class="card-body">
+									<form method="post" th:action="@{/admin/dashboard/store/add}">
+										<div class="row">
+											<div class="col-md-12">
+												<div class="form-group">
+													<label class="bmd-label-floating">Name</label> <input type="text" th:field="*{store.name}" class="form-control" /> <label
+														th:if="${#fields.hasErrors('store.name')}" th:errors="*{store.name}" class="validation-message"></label>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-12">
+												<div class="form-group">
+													<label>Description</label>
+													<div class="form-group">
+														<label class="bmd-label-floating"> Kindly add a short description for the category</label>
+														<textarea class="form-control" rows="5" th:field="*{store.description}"></textarea>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-4">
+												<div class="file-field">
+													<div class="btn custom-file btn-primary pull-left">
+														<i class="material-icons"> cloud_upload </i> <input class="custom-file-input" type="file"></input>
+													</div>
+												</div>
+											</div>
+											<div class="col-md-8">
+												<div class="file-path-wrapper">
+													<label class="bmd-label-floating">File Path</label> <input th:value="${store.image}" type="text" placeholder="Upload your file"
+														class="form-control">
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-6">
+												<div class="form-group">
+													<label class="bmd-label-floating">Store</label> <input type="text" th:field="*{store.name}" class="form-control" /> <label
+														th:if="${#fields.hasErrors('store.name')}" th:errors="*{store.name}" class="validation-message"></label>
+												</div>
+											</div>
+											<div class="col-md-6">
+												<div class="form-group">
+													<label class="bmd-label-floating">Name</label> <input type="text" th:field="*{store.name}" class="form-control" /> <label
+														th:if="${#fields.hasErrors('store.name')}" th:errors="*{store.name}" class="validation-message"></label>
+												</div>
+											</div>
+										</div>
+										<button type="submit" class="btn btn-primary pull-right">Add Category</button>
+										<div class="clearfix"></div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div th:include="layouts/admin-pannel-layout :: footer"></div>
+	</div>
+	</div>
+</body>
+</html>

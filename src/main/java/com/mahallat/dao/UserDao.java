@@ -10,6 +10,4 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserDao {
 	@PersistenceContext
 	private EntityManager entityManager;
-
-
 }

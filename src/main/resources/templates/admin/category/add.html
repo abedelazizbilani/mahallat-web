@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layouts/adminpannellayout.html}" xmlns:th="http://www.thymeleaf.org">
+<head th:include="layouts/admin-pannel-layout :: htmlhead" th:with="title=${category.name}"></head>
+<body>
+	<div class="wrapper">
+		<div th:include="layouts/admin-pannel-layout :: sidebar"></div>
+		<div class="main-panel ps-container ps-theme-default ps-active-y" layout:fragment="main-pannel">
+			<nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
+				<div class="container-fluid">
+					<div class="navbar-wrapper">
+						<a class="navbar-brand" href="#pablo">New Category</a>
+					</div>
+				</div>
+			</nav>
+			<div class="content">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-md-8">
+							<div class="card">
+								<div class="card-header card-header-primary">
+									<h4 class="card-title">Add Category</h4>
+								</div>
+								<div class="card-body">
+									<form method="post" th:action="@{/admin/dashboard/category/add}">
+										<div class="row">
+											<div class="col-md-6">
+												<div class="form-group">
+													<label class="bmd-label-floating">Name</label> <input type="text" th:field="*{category.name}" class="form-control" /> <label
+														th:if="${#fields.hasErrors('category.name')}" th:errors="*{category.name}" class="validation-message"></label>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-12">
+												<div class="form-group">
+													<label>Description</label>
+													<div class="form-group">
+														<label class="bmd-label-floating"> Kindly add a short description for the category</label>
+														<textarea class="form-control" rows="5" th:field="*{category.description}"></textarea>
+													</div>
+												</div>
+											</div>
+										</div>
+										<input th:value="${category.id}" th:field="*{category.id}" type="hidden" class="hidden">
+										<button type="submit" class="btn btn-primary pull-right">Add Category</button>
+										<div class="clearfix"></div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div th:include="layouts/admin-pannel-layout :: footer"></div>
+	</div>
+	</div>
+</body>
+</html>

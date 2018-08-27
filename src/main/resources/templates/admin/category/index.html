@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layouts/adminpannellayout.html}" xmlns:th="http://www.thymeleaf.org">
+<head th:include="layouts/admin-pannel-layout :: htmlhead" th:with="title='Categories'"></head>
+<body>
+	<div class="wrapper">
+		<div th:include="layouts/admin-pannel-layout :: sidebar"></div>
+		<div class="main-panel ps-container ps-theme-default ps-active-y" layout:fragment="main-pannel">
+			<nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
+				<div class="container-fluid">
+					<div class="navbar-wrapper">
+						<a class="navbar-brand" href="#">Categories List</a>
+						<a class="btn btn-primary pull-left" href="/admin/dashboard/category/add">Add Category</a>
+					</div>
+				</div>
+			</nav>
+			<div class="content">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="card card-plain">
+								<div class="card-header card-header-primary">
+									<h4 class="card-title mt-0">Category List</h4>
+								</div>
+								<div class="card-body">
+									<div class="table-responsive">
+										<table class="table table-hover">
+											<thead class="">
+												<th>ID</th>
+												<th>Name</th>
+												<th>Description</th>
+												<th>Actions</th>
+											</thead>
+											<tbody>
+												<tr th:each="category : ${categories}">
+													<td th:text="${category.id}"></td>
+													<td th:text="${category.name}">Dakota Rice</td>
+													<td th:text="${category.description}">Niger</td>
+													<td>
+													<a th:href="@{'/admin/dashboard/category/edit/' + ${category.id}}"><i class="material-icons"> edit </i> </a>
+													<a th:href="@{'/admin/dashboard/category/delete/' + ${category.id}}"><i class="material-icons"> delete </i></a></td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div th:include="layouts/admin-pannel-layout :: footer"></div>
+		</div>
+	</div>
+</body>
+</html>

@@ -17,7 +17,7 @@ import com.mahallat.entity.Store;
 import com.mahallat.entity.StoreRating;
 import com.mahallat.services.IStoreService;
 
-@RestController
+@RestController("api-store-controller")
 @RequestMapping(value = "api")
 @CrossOrigin
 public class StoreController {

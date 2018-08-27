@@ -16,7 +16,7 @@ import com.mahallat.entity.Product;
 import com.mahallat.entity.Store;
 import com.mahallat.services.ICategoryService;
 
-@RestController
+@RestController("api-controller")
 @RequestMapping("api")
 @CrossOrigin
 public class CategoryController {

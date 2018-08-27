@@ -48,6 +48,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter{
 			authorizeRequests()
 				.antMatchers("/").permitAll()
 				.antMatchers("/api/stores").permitAll()
+				.antMatchers("/api/categories").permitAll()
 				.antMatchers("/login").permitAll()
 				.antMatchers("/registration").permitAll()
 				.antMatchers("/admin/**").hasAuthority("ADMIN").anyRequest()
@@ -61,6 +62,16 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter{
 				.logoutSuccessUrl("/").and().exceptionHandling()
 				.accessDeniedPage("/access-denied");
 	}
+	
+	@Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) 
+      throws Exception {
+        auth
+          .inMemoryAuthentication()
+          .withUser("user").password(bCryptPasswordEncoder.encode("password")).roles("STORE")
+          .and()
+          .withUser("admin").password(bCryptPasswordEncoder.encode("admin")).roles("ADMIN");
+    }
 	
 	@Override
 	public void configure(WebSecurity web) throws Exception {

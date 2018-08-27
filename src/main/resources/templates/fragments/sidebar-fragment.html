@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layouts/adminpannellayout.html}" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layouts/adminpannellayout.html}" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <div th:fragment="sidebar" id="sidebar">
 	<div class="sidebar" data-color="purple" data-background-color="white" data-image="../images/sidebar-1.jpg">
 		<div class="logo">
@@ -10,15 +11,21 @@
 				<li class="nav-item  "><a class="nav-link" href="/admin/dashboard"> <i class="material-icons">dashboard</i>
 						<p>Dashboard</p>
 				</a></li>
-				<li class="nav-item "><a class="nav-link" href="/admin/dashboard/users"> <i class="material-icons">content_paste</i>
+				<li class="nav-item "><a class="nav-link" href="/admin/dashboard/users"> <i class="material-icons">person</i>
 						<p>Users List</p>
 				</a></li>
-				<!-- <li class="nav-item active-pro ">
-                <a class="nav-link" href="./upgrade.html">
-                    <i class="material-icons">unarchive</i>
-                    <p>Upgrade to PRO</p>
-                </a>
-            </li> -->
+				<li sec:authorize="hasAuthority('ADMIN')" class="nav-item "><a class="nav-link" href="/admin/dashboard/stores"> <i class="material-icons">
+							store_mall_directory </i>
+						<p>Stores List</p>
+				</a></li>
+				<li sec:authorize="hasAuthority('ADMIN')" class="nav-item "><a class="nav-link" href="/admin/dashboard/categories"> <i class="material-icons">
+							category </i>
+						<p>Store Categories</p>
+				</a></li>
+				<li sec:authorize="hasAuthority('ADMIN')" class="nav-item "><a class="nav-link" href="/admin/dashboard/stores"> <i class="material-icons">
+							settings </i>
+						<p>System Settings</p>
+				</a></li>
 			</ul>
 		</div>
 	</div>

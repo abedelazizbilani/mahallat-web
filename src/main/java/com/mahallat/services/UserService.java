@@ -85,4 +85,8 @@ public class UserService implements UserDetailsService, IUserService {
 		return userDAO.findStoreUsers();
 	}
 
+	@Override
+	public void deleteUser(User user) {
+		userDAO.delete(user);
+	}
 }
