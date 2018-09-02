@@ -30,7 +30,6 @@ public class UserController {
 
 	@GetMapping(value = "/admin/dashboard/users")
 	public ModelAndView users() {
-
 		ModelAndView modelAndView = new ModelAndView();
 		List<User> usersList = userService.findStoreUsers();
 		modelAndView.addObject("users", usersList);

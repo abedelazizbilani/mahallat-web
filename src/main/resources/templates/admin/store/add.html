@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layouts/adminpannellayout.html}" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layouts/adminpannellayout.html}" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:include="layouts/admin-pannel-layout :: htmlhead" th:with="title=${store.name}"></head>
 <body>
 	<div class="wrapper">
@@ -15,7 +16,7 @@
 			<div class="content">
 				<div class="container-fluid">
 					<div class="row">
-						<div class="col-md-8">
+						<div class="col-md-12">
 							<div class="card">
 								<div class="card-header card-header-primary">
 									<h4 class="card-title">Add my Store</h4>
@@ -23,10 +24,26 @@
 								<div class="card-body">
 									<form method="post" th:action="@{/admin/dashboard/store/add}">
 										<div class="row">
-											<div class="col-md-12">
+											<div class="col-md-6">
 												<div class="form-group">
 													<label class="bmd-label-floating">Name</label> <input type="text" th:field="*{store.name}" class="form-control" /> <label
 														th:if="${#fields.hasErrors('store.name')}" th:errors="*{store.name}" class="validation-message"></label>
+												</div>
+											</div>
+											<div class="col-md-6">
+												<div class="form-group">
+													<div class="fileinput fileinput-new text-center" data-provides="fileinput">
+														<div class="fileinput-new thumbnail img-raised">
+															<img src="https://epicattorneymarketing.com/wp-content/uploads/2016/07/Headshot-Placeholder-1.png" alt="...">
+														</div>
+														<div class="fileinput-preview fileinput-exists thumbnail img-raised"></div>
+														<div>
+															<span class="btn btn-raised btn-round btn-default btn-file"> <span class="fileinput-new">Select image</span> <span
+																class="fileinput-exists">Change</span> <input type="file" name="..." />
+															</span> <a href="#pablo" class="btn btn-danger btn-round fileinput-exists" data-dismiss="fileinput"> <i class="fa fa-times"></i> Remove
+															</a>
+														</div>
+													</div>
 												</div>
 											</div>
 										</div>
@@ -35,43 +52,40 @@
 												<div class="form-group">
 													<label>Description</label>
 													<div class="form-group">
-														<label class="bmd-label-floating"> Kindly add a short description for the category</label>
+														<label class="bmd-label-floating"> Kindly add a short description of your Store</label>
 														<textarea class="form-control" rows="5" th:field="*{store.description}"></textarea>
 													</div>
 												</div>
 											</div>
 										</div>
 										<div class="row">
-											<div class="col-md-4">
-												<div class="file-field">
-													<div class="btn custom-file btn-primary pull-left">
-														<i class="material-icons"> cloud_upload </i> <input class="custom-file-input" type="file"></input>
-													</div>
+											<div class="col-md-6">
+												<div class="form-group">
+													<label class="bmd-label-floating">Open Hour</label> <input type="text" th:field="*{store.openHour}" class="form-control datetimepicker" /> <label
+														th:if="${#fields.hasErrors('store.openHour')}" th:errors="*{store.openHour}" class="validation-message"></label>
 												</div>
 											</div>
-											<div class="col-md-8">
-												<div class="file-path-wrapper">
-													<label class="bmd-label-floating">File Path</label> <input th:value="${store.image}" type="text" placeholder="Upload your file"
-														class="form-control">
+											<div class="col-md-6">
+												<div class="form-group">
+													<label class="bmd-label-floating">Close Hour</label> <input type="text" th:field="*{store.closeHour}" class="form-control datetimepicker" /><label
+														th:if="${#fields.hasErrors('store.closeHour')}" th:errors="*{store.closeHour}" class="validation-message"></label>
 												</div>
 											</div>
 										</div>
 										<div class="row">
-											<div class="col-md-6">
-												<div class="form-group">
-													<label class="bmd-label-floating">Store</label> <input type="text" th:field="*{store.name}" class="form-control" /> <label
-														th:if="${#fields.hasErrors('store.name')}" th:errors="*{store.name}" class="validation-message"></label>
-												</div>
-											</div>
-											<div class="col-md-6">
-												<div class="form-group">
-													<label class="bmd-label-floating">Name</label> <input type="text" th:field="*{store.name}" class="form-control" /> <label
-														th:if="${#fields.hasErrors('store.name')}" th:errors="*{store.name}" class="validation-message"></label>
-												</div>
+											<div class="col-md-4">
+												<select class="selectpicker " th:field="${store.category}" data-style="select-with-transition" title="Categories">
+													<option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+												</select>
 											</div>
 										</div>
-										<button type="submit" class="btn btn-primary pull-right">Add Category</button>
+										<div class="row">
+											<div class="col-md-12 text-center">
+												<button type="submit" class="btn btn-primary center">Save Store</button>
+											</div>
+										</div>
 										<div class="clearfix"></div>
+										<input th:value="${user.id}" th:field="*{user.id}" type="hidden" class="hidden">
 									</form>
 								</div>
 							</div>
@@ -81,6 +95,23 @@
 			</div>
 		</div>
 		<div th:include="layouts/admin-pannel-layout :: footer"></div>
+		<script type="text/javascript">
+
+		<!-- javascript for init -->
+		$('.datetimepicker').datetimepicker({
+			 format: 'LT',
+		    icons: {
+		        time: "fa fa-clock-o",
+		        up: "fa fa-chevron-up",
+		        down: "fa fa-chevron-down",
+		        previous: 'fa fa-chevron-left',
+		        next: 'fa fa-chevron-right',
+		        today: 'fa fa-screenshot',
+		        clear: 'fa fa-trash',
+		        close: 'fa fa-remove'
+		    }
+		});
+		</script>
 	</div>
 	</div>
 </body>

@@ -42,8 +42,8 @@ public class UserService implements UserDetailsService, IUserService {
 	}
 
 	@Override
-	public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-		User user = userDAO.findByUsername(userId);
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		User user = userDAO.findByUsername(username);
 		if (user == null) {
 			throw new UsernameNotFoundException("Invalid username or password.");
 		}

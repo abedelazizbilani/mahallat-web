@@ -33,7 +33,7 @@ public class ProductController {
 		if (product == null) {
 			//http://www.springboottutorial.com/spring-boot-exception-handling-for-rest-services
 			//https://www.devglan.com/spring-security/jwt-role-based-authorization
-			return new ResponseEntity(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<Product>(HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<Product>(product, HttpStatus.OK);
 	}

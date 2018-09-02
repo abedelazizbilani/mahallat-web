@@ -5,8 +5,8 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.mahallat</groupId>
-	<artifactId>mahallat-web</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<artifactId>mahallat</artifactId>
+	<version>1.0</version>
 	<packaging>war</packaging>
 
 	<name>mahallat-web</name>
