@@ -8,21 +8,21 @@
 		</div>
 		<div class="sidebar-wrapper">
 			<ul class="nav">
-				<li class="nav-item  "><a class="nav-link" href="/admin/dashboard"> <i class="material-icons">dashboard</i>
+				<li class="nav-item  "><a class="nav-link" th:href="@{~/admin/dashboard}"> <i class="material-icons">dashboard</i>
 						<p>Dashboard</p>
 				</a></li>
-				<li class="nav-item "><a class="nav-link" href="/admin/dashboard/users"> <i class="material-icons">person</i>
+				<li class="nav-item "><a class="nav-link" th:href="@{~/admin/dashboard/users}"> <i class="material-icons">person</i>
 						<p>Users List</p>
 				</a></li>
-				<li sec:authorize="hasAuthority('ADMIN')" class="nav-item "><a class="nav-link" href="/admin/dashboard/stores"> <i class="material-icons">
+				<li sec:authorize="hasAuthority('ADMIN')" class="nav-item "><a class="nav-link" th:href="@{~/admin/dashboard/stores}"> <i class="material-icons">
 							store_mall_directory </i>
 						<p>Stores List</p>
 				</a></li>
-				<li sec:authorize="hasAuthority('ADMIN')" class="nav-item "><a class="nav-link" href="/admin/dashboard/categories"> <i class="material-icons">
-							category </i>
+				<li sec:authorize="hasAuthority('ADMIN')" class="nav-item "><a class="nav-link" th:href="@{~/admin/dashboard/categories}"> <i
+						class="material-icons"> category </i>
 						<p>Store Categories</p>
 				</a></li>
-				<li sec:authorize="hasAuthority('ADMIN')" class="nav-item "><a class="nav-link" href="/admin/dashboard/stores"> <i class="material-icons">
+				<li sec:authorize="hasAuthority('ADMIN')" class="nav-item "><a class="nav-link" th:href="@{~/admin/dashboard/stores}"> <i class="material-icons">
 							settings </i>
 						<p>System Settings</p>
 				</a></li>
