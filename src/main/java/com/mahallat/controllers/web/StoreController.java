@@ -9,11 +9,14 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,7 +34,7 @@ import com.mahallat.services.UserService;
 @Controller("web-store-controller")
 public class StoreController {
 	
-	private static String UPLOADED_FOLDER = "C://Projects//mahallat-web//src//main//uploads//stores//";
+	private static String UPLOADED_FOLDER = "C:\\";
 
 	
 	@Autowired
@@ -65,18 +68,36 @@ public class StoreController {
 		modelAndView.setViewName("admin/store/index");
 		return modelAndView;
 	}
+	@Autowired
+	private MessageSource messageSource;
 	
 	@PostMapping(value="/admin/dashboard/store/add")
 	public ModelAndView add(@Valid Store store, BindingResult bindingResult , @RequestParam("image") MultipartFile file
-           ) {
+			 ,@RequestParam("user_id") Integer userId ,@RequestParam("category") Integer categoryId) {
 		ModelAndView modelAndView = new ModelAndView("redirect:/admin/dashboard/stores");
 		if (bindingResult.hasErrors()) {
+			
+			for (Object object : bindingResult.getAllErrors()) {
+			    if(object instanceof FieldError) {
+			        FieldError fieldError = (FieldError) object;
+
+			        /**
+			          * Use null as second parameter if you do not use i18n (internationalization)
+			          */
+
+			        String message = messageSource.getMessage(fieldError, null);
+			        System.out.println(message);
+			        System.out.println(categoryId);
+			    }
+			}
+			
 			User user = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
 			modelAndView.addObject("user", user);
 			modelAndView.setViewName("admin/store/add");
 		} else {
 			try {
-
+				store.setCategory(categoryService.one(categoryId));
+				store.setUser(userService.findById(userId));
 	            // Get the file and save it somewhere
 	            byte[] bytes = file.getBytes();
 	            Path path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());

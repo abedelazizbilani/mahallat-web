@@ -17,6 +17,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -28,8 +30,6 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Table(name = "store", catalog = "mahallat")
 public class Store implements java.io.Serializable {
 
-	@JsonIgnore
-
 	private Integer id;
 	private Category category;
 	private User user;
@@ -38,7 +38,9 @@ public class Store implements java.io.Serializable {
 	private String description;
 	private double longitude;
 	private double latitude;
+	@DateTimeFormat(pattern = "hh:mm aa")
 	private Date openHour;
+	@DateTimeFormat(pattern = "hh:mm aa")
 	private Date closeHour;
 	private String image;
 	private Date createdAt;
@@ -90,10 +92,11 @@ public class Store implements java.io.Serializable {
 	public Integer getId() {
 		return this.id;
 	}
-
+	
 	public void setId(Integer id) {
 		this.id = id;
 	}
+		
 	@JsonManagedReference
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "category_id", nullable = false)

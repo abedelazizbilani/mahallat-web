@@ -44,6 +44,10 @@ public class StoreDao implements IStoreDao {
 
 	@Override
 	public void save(Store store) {
+		
+		String output = store.toString();
+	    System.out.println(output);
+		
 		entityManager.persist(store);
 	}
 
