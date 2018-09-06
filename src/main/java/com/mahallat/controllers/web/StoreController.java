@@ -72,7 +72,7 @@ public class StoreController {
 	private MessageSource messageSource;
 	
 	@PostMapping(value="/admin/dashboard/store/add")
-	public ModelAndView add(@Valid Store store, BindingResult bindingResult , @RequestParam("image") MultipartFile file
+	public ModelAndView add(Store store, BindingResult bindingResult , @RequestParam("image") MultipartFile file
 			 ,@RequestParam("user_id") Integer userId ,@RequestParam("category") Integer categoryId) {
 		ModelAndView modelAndView = new ModelAndView("redirect:/admin/dashboard/stores");
 		if (bindingResult.hasErrors()) {
@@ -90,9 +90,10 @@ public class StoreController {
 			        System.out.println(categoryId);
 			    }
 			}
-			
+			List<Category> categoriesList = categoryService.getAllCategories();
 			User user = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
 			modelAndView.addObject("user", user);
+			modelAndView.addObject("categories", categoriesList);
 			modelAndView.setViewName("admin/store/add");
 		} else {
 			try {
