@@ -11,4 +11,5 @@ public interface IStoreService {
 	Store one(int id);
 	List<Product> getAllProductsByStoreId(int id);
 	boolean rate(StoreRating storeRating);
+	void save(Store store);
 }

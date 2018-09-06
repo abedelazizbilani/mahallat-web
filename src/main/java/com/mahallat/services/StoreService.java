@@ -3,10 +3,12 @@ package com.mahallat.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.mahallat.dao.IStoreDao;
+import com.mahallat.entity.Category;
 import com.mahallat.entity.Product;
 import com.mahallat.entity.Store;
 import com.mahallat.entity.StoreRating;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -26,6 +28,12 @@ public class StoreService implements IStoreService{
 	}
 
 	@Override
+	public void save(Store store) {
+		store.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+		storeDAO.save(store);
+	}
+	
+	@Override
 	public List<Product> getAllProductsByStoreId(int id) {
 		return storeDAO.getAllProductsByStoreId(id);
 	}
@@ -38,5 +46,7 @@ public class StoreService implements IStoreService{
 		storeDAO.rate(storeRating);
 		return true;
 	}
+	
+	
 
 }

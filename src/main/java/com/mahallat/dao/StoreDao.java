@@ -43,6 +43,11 @@ public class StoreDao implements IStoreDao {
 	}
 
 	@Override
+	public void save(Store store) {
+		entityManager.persist(store);
+	}
+
+	@Override
 	public boolean ratingExist(int user_id, int store_id) {
 		String hql = "From StoreRating as storeRating where storeRating.user_id = ? and storeRating.store_id = ?";
 		int count = entityManager.createQuery(hql).setParameter(1, user_id).setParameter(2, store_id).getResultList()
