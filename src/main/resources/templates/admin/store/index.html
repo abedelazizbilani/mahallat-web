@@ -9,7 +9,7 @@
 				<div class="container-fluid">
 					<div class="navbar-wrapper">
 						<a class="navbar-brand" href="#">Stores List</a>
-						<a class="btn btn-primary pull-left" href="/admin/dashboard/category/add">Add Store</a>
+						<a class="btn btn-primary pull-left" href="/admin/dashboard/store/add">Add Store</a>
 					</div>
 				</div>
 			</nav>
@@ -31,13 +31,13 @@
 												<th>Actions</th>
 											</thead>
 											<tbody>
-												<tr th:each="category : ${categories}">
-													<td th:text="${category.id}"></td>
-													<td th:text="${category.name}">Dakota Rice</td>
-													<td th:text="${category.description}">Niger</td>
+												<tr th:each="store : ${stores}">
+													<td th:text="${store.id}"></td>
+													<td th:text="${store.name}">Dakota Rice</td>
+													<td th:text="${store.description}">Niger</td>
 													<td>
-													<a th:href="@{'/admin/dashboard/category/edit/' + ${category.id}}"><i class="material-icons"> edit </i> </a>
-													<a th:href="@{'/admin/dashboard/category/delete/' + ${category.id}}"><i class="material-icons"> delete </i></a></td>
+													<a th:href="@{'/admin/dashboard/store/edit/' + ${store.id}}"><i class="material-icons">edit </i> </a>
+													<a th:href="@{'/admin/dashboard/store/delete/' + ${store.id}}"><i class="material-icons">delete </i></a></td>
 												</tr>
 											</tbody>
 										</table>

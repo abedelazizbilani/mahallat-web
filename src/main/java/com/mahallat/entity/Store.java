@@ -11,12 +11,15 @@ import javax.persistence.GeneratedValue;
 import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -32,20 +35,25 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 public class Store implements java.io.Serializable {
 
 	private Integer id;
-	private Category category;
 	private User user;
+	@NotEmpty
 	private String name;
 	private byte active;
+	@NotEmpty
 	private String description;
+	@NotNull
 	private double longitude;
+	@NotNull
 	private double latitude;
 	@DateTimeFormat(pattern = "hh:mm aa")
 	private Date openHour;
 	@DateTimeFormat(pattern = "hh:mm aa")
+	@NotNull
 	private Date closeHour;
 	private String image;
 	private Date createdAt;
 	private Date updatedAt;
+	private Category category;
 	private Set<StoreRating> storeRatings = new HashSet<StoreRating>(0);
 	private Set<StoreLike> storeLikes = new HashSet<StoreLike>(0);
 	private Set<Product> products = new HashSet<Product>(0);
@@ -93,11 +101,11 @@ public class Store implements java.io.Serializable {
 	public Integer getId() {
 		return this.id;
 	}
-	
+
 	public void setId(Integer id) {
 		this.id = id;
 	}
-		
+
 	@JsonManagedReference
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "category_id", nullable = false)
@@ -213,6 +221,7 @@ public class Store implements java.io.Serializable {
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
 	}
+
 	@JsonManagedReference
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "store")
 	public Set<StoreRating> getStoreRatings() {
@@ -222,7 +231,7 @@ public class Store implements java.io.Serializable {
 	public void setStoreRatings(Set<StoreRating> storeRatings) {
 		this.storeRatings = storeRatings;
 	}
-	
+
 	@JsonBackReference
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "store")
 	public Set<StoreLike> getStoreLikes() {
@@ -232,7 +241,7 @@ public class Store implements java.io.Serializable {
 	public void setStoreLikes(Set<StoreLike> storeLikes) {
 		this.storeLikes = storeLikes;
 	}
-	
+
 	@JsonBackReference
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "store")
 	public Set<Product> getProducts() {

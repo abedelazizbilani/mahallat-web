@@ -5,19 +5,22 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-
-import javax.validation.Valid;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,32 +36,16 @@ import com.mahallat.services.UserService;
 
 @Controller("web-store-controller")
 public class StoreController {
-	
-	private static String UPLOADED_FOLDER = "C:\\";
 
-	
 	@Autowired
 	StoreService storeService;
 	@Autowired
 	CategoryService categoryService;
 	@Autowired
 	UserService userService;
-	
-	@GetMapping("/admin/dashboard/store/add")
-	public ModelAndView add() {
-		ModelAndView modelAndView = new ModelAndView();
-		List<Category> categoriesList = categoryService.getAllCategories();
-		
-		User user = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
-        
-        
-		modelAndView.addObject("store", new Store());
-		modelAndView.addObject("categories", categoriesList);
-		modelAndView.addObject("user", user);
 
-		modelAndView.setViewName("admin/store/add");
-		return modelAndView;
-	}
+	@Value("${spring.file.uploads.path}")
+	private String storeImagesPath;
 
 	@GetMapping("/admin/dashboard/stores")
 	public ModelAndView index() {
@@ -68,28 +55,26 @@ public class StoreController {
 		modelAndView.setViewName("admin/store/index");
 		return modelAndView;
 	}
-	@Autowired
-	private MessageSource messageSource;
-	
-	@PostMapping(value="/admin/dashboard/store/add")
-	public ModelAndView add(Store store, BindingResult bindingResult , @RequestParam("image") MultipartFile file
-			 ,@RequestParam("user_id") Integer userId ,@RequestParam("category") Integer categoryId) {
+
+	@GetMapping("/admin/dashboard/store/add")
+	public ModelAndView add() {
+		ModelAndView modelAndView = new ModelAndView();
+
+		User user = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+
+		modelAndView.addObject("store", new Store());
+		modelAndView.addObject("categories", categoryService.getAllCategories());
+		modelAndView.addObject("user", user);
+
+		modelAndView.setViewName("admin/store/add");
+		return modelAndView;
+	}
+
+	@PostMapping(value = "/admin/dashboard/store/add")
+	public ModelAndView add(Store store, BindingResult bindingResult, @RequestParam MultipartFile file,
+			@RequestParam("user_id") Integer userId, @RequestParam("category") Integer categoryId) {
 		ModelAndView modelAndView = new ModelAndView("redirect:/admin/dashboard/stores");
 		if (bindingResult.hasErrors()) {
-			
-			for (Object object : bindingResult.getAllErrors()) {
-			    if(object instanceof FieldError) {
-			        FieldError fieldError = (FieldError) object;
-
-			        /**
-			          * Use null as second parameter if you do not use i18n (internationalization)
-			          */
-
-			        String message = messageSource.getMessage(fieldError, null);
-			        System.out.println(message);
-			        System.out.println(categoryId);
-			    }
-			}
 			List<Category> categoriesList = categoryService.getAllCategories();
 			User user = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
 			modelAndView.addObject("user", user);
@@ -97,19 +82,42 @@ public class StoreController {
 			modelAndView.setViewName("admin/store/add");
 		} else {
 			try {
-				store.setCategory(categoryService.one(categoryId));
+				String imagePath = storeImagesPath + file.getOriginalFilename();
+				String type = file.getContentType().split("/")[1];
+				String newImageName = UUID.randomUUID().toString() + "." + type;
+
+				store.setCategory(categoryService.one((categoryId)));
 				store.setUser(userService.findById(userId));
-	            // Get the file and save it somewhere
-	            byte[] bytes = file.getBytes();
-	            Path path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
-	            Files.write(path, bytes);
-	            store.setImage(path.toString());
+				// Get the file and save it somewhere
+				byte[] bytes = file.getBytes();
+				Path path = Paths.get(imagePath);
+
+				Files.write(path.resolveSibling(newImageName), bytes);
+
+				store.setImage("uploads/stores/" + newImageName);
 			} catch (IOException e) {
-	            e.printStackTrace();
-	        }
-			
+				e.printStackTrace();
+			}
+
 			storeService.save(store);
 		}
+		return modelAndView;
+	}
+
+	@GetMapping(value = "admin/dashboard/store/edit/{id}")
+	public ModelAndView edit(@PathVariable("id") int id) {
+		ModelAndView modelAndView = new ModelAndView();
+		Store store = storeService.one(id);
+		if (store == null) {
+			return new ModelAndView("redirect:/admin/dashboard/stores");
+		}
+		modelAndView.addObject("categories", categoryService.getAllCategories());
+		modelAndView.addObject("user",
+				userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName()));
+
+		ClassLoader classLoader = getClass().getClassLoader();
+		modelAndView.addObject("store", store);
+		modelAndView.setViewName("admin/store/edit");
 		return modelAndView;
 	}
 
