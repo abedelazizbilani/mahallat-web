@@ -7,6 +7,8 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -30,6 +33,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.mahallat.entity.Category;
 import com.mahallat.entity.Store;
 import com.mahallat.entity.User;
+import com.mahallat.models.UserUpdate;
 import com.mahallat.services.CategoryService;
 import com.mahallat.services.StoreService;
 import com.mahallat.services.UserService;
@@ -58,10 +62,15 @@ public class StoreController {
 
 	@GetMapping("/admin/dashboard/store/add")
 	public ModelAndView add() {
-		ModelAndView modelAndView = new ModelAndView();
-
 		User user = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
-
+		// check if user has a store
+		boolean hasStore = storeService.userHasStore(user.getId());
+		if (hasStore) {
+			// return to main dashboard if user tried to add a store and he already has one
+			return new ModelAndView("redirect:/admin/dashboard");
+		}
+		// user don't have a store and he can add one
+		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("store", new Store());
 		modelAndView.addObject("categories", categoryService.getAllCategories());
 		modelAndView.addObject("user", user);
@@ -75,30 +84,32 @@ public class StoreController {
 			@RequestParam("user_id") Integer userId, @RequestParam("category") Integer categoryId) {
 		ModelAndView modelAndView = new ModelAndView("redirect:/admin/dashboard/stores");
 		if (bindingResult.hasErrors()) {
+			// list categories
 			List<Category> categoriesList = categoryService.getAllCategories();
+			// get logged in user details and id
 			User user = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
 			modelAndView.addObject("user", user);
 			modelAndView.addObject("categories", categoriesList);
 			modelAndView.setViewName("admin/store/add");
 		} else {
 			try {
+				// Get the file and save it somewhere
 				String imagePath = storeImagesPath + file.getOriginalFilename();
 				String type = file.getContentType().split("/")[1];
 				String newImageName = UUID.randomUUID().toString() + "." + type;
-
-				store.setCategory(categoryService.one((categoryId)));
-				store.setUser(userService.findById(userId));
-				// Get the file and save it somewhere
 				byte[] bytes = file.getBytes();
 				Path path = Paths.get(imagePath);
-
 				Files.write(path.resolveSibling(newImageName), bytes);
 
 				store.setImage("uploads/stores/" + newImageName);
+
+				store.setActive(store.getActive());
+				store.setCategory(categoryService.one((categoryId)));
+				store.setUser(userService.findById(userId));
+
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-
 			storeService.save(store);
 		}
 		return modelAndView;
@@ -114,10 +125,46 @@ public class StoreController {
 		modelAndView.addObject("categories", categoryService.getAllCategories());
 		modelAndView.addObject("user",
 				userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName()));
-
-		ClassLoader classLoader = getClass().getClassLoader();
 		modelAndView.addObject("store", store);
 		modelAndView.setViewName("admin/store/edit");
+		return modelAndView;
+	}
+
+	@PostMapping(value = "/admin/dashboard/store/edit")
+	public ModelAndView update(@Valid Store store, BindingResult bindingResult, @RequestParam MultipartFile file,
+			@RequestParam("user_id") Integer userId, @RequestParam("category") Integer categoryId) {
+		ModelAndView modelAndView = new ModelAndView("redirect:/admin/dashboard/stores");
+
+		if (bindingResult.hasErrors()) {
+			modelAndView.addObject("categories", categoryService.getAllCategories());
+			modelAndView.addObject("user",
+					userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName()));
+			modelAndView.addObject("store", store);
+			modelAndView.setViewName("admin/category/edit");
+		}
+
+		Store storeExists = storeService.one(store.getId());
+		if (storeExists == null) {
+			return new ModelAndView("redirect:/admin/dashboard/stores");
+		} else {
+			if (!file.isEmpty()) {
+				try {
+					String imagePath = storeImagesPath + file.getOriginalFilename();
+					String type = file.getContentType().split("/")[1];
+					String newImageName = UUID.randomUUID().toString() + "." + type;
+					byte[] bytes = file.getBytes();
+					Path path = Paths.get(imagePath);
+					Files.write(path.resolveSibling(newImageName), bytes);
+					store.setImage("uploads/stores/" + newImageName);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			store.setImage(storeExists.getImage());
+			store.setActive(store.getActive() == null ? false : true );
+			store.setCategory(categoryService.one((categoryId)));
+			storeService.update(store);
+		}
 		return modelAndView;
 	}
 

@@ -6,6 +6,7 @@ import javax.persistence.PersistenceContext;
 
 import org.springframework.stereotype.Repository;
 
+import com.mahallat.entity.Category;
 import com.mahallat.entity.Product;
 import com.mahallat.entity.Store;
 import com.mahallat.entity.StoreRating;
@@ -26,7 +27,7 @@ public class StoreDao implements IStoreDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Store> getAllStores() {
-		String hql = "FROM Store as store where store.active = 1";
+		String hql = "FROM Store as store";
 		return (List<Store>) entityManager.createQuery(hql).getResultList();
 	}
 
@@ -44,11 +45,33 @@ public class StoreDao implements IStoreDao {
 
 	@Override
 	public void save(Store store) {
-		
-		String output = store.toString();
-	    System.out.println(output);
-		
 		entityManager.persist(store);
+	}
+	
+	@Override
+	public void update(Store store) {
+		
+		Store storeExist = one(store.getId());
+		storeExist.setName(store.getName());
+		storeExist.setDescription(store.getDescription());
+		storeExist.setActive(store.getActive());
+		storeExist.setImage(store.getImage());
+		storeExist.setLatitude(store.getLatitude());
+		storeExist.setLongitude(store.getLongitude());
+		storeExist.setOpenHour(store.getOpenHour());
+		storeExist.setCloseHour(store.getCloseHour());
+		storeExist.setCategory(store.getCategory());
+		
+		entityManager.flush();
+	}
+	
+
+	@Override
+	public boolean userHasStore(int id) {
+		String hql = "FROM Store as store where store.user_id = ? ";
+		int count = entityManager.createQuery(hql).setParameter(1, id).getResultList().size();
+		// check if user has store if bigger than zero than he has a store => cannot create a store
+		return count > 0 ? true : false;
 	}
 
 	@Override

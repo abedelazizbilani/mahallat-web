@@ -12,15 +12,15 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @Service
-public class StoreService implements IStoreService{
+public class StoreService implements IStoreService {
 	@Autowired
 	private IStoreDao storeDAO;
-	
+
 	@Override
-	public List<Store> getAllStores(){
+	public List<Store> getAllStores() {
 		return storeDAO.getAllStores();
 	}
-	
+
 	@Override
 	public Store one(int id) {
 		Store obj = storeDAO.one(id);
@@ -32,21 +32,29 @@ public class StoreService implements IStoreService{
 		store.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 		storeDAO.save(store);
 	}
-	
+
 	@Override
 	public List<Product> getAllProductsByStoreId(int id) {
 		return storeDAO.getAllProductsByStoreId(id);
 	}
+	
+	@Override
+	public boolean userHasStore(int id) {
+		return storeDAO.userHasStore(id);
+	}
+	
+	@Override
+	public void update(Store store) {
+		storeDAO.update(store);
+	}
 
 	@Override
 	public synchronized boolean rate(StoreRating storeRating) {
-		if(storeDAO.ratingExist(storeRating.getUser().getId() , storeRating.getStore().getId())) {
+		if (storeDAO.ratingExist(storeRating.getUser().getId(), storeRating.getStore().getId())) {
 			return false;
 		}
 		storeDAO.rate(storeRating);
 		return true;
 	}
-	
-	
 
 }

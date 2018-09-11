@@ -21,6 +21,9 @@ import javax.persistence.Transient;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -38,7 +41,7 @@ public class Store implements java.io.Serializable {
 	private User user;
 	@NotEmpty
 	private String name;
-	private byte active;
+	private Boolean active;
 	@NotEmpty
 	private String description;
 	@NotNull
@@ -51,8 +54,15 @@ public class Store implements java.io.Serializable {
 	@NotNull
 	private Date closeHour;
 	private String image;
-	private Date createdAt;
-	private Date updatedAt;
+    @Column(nullable = false, updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    @CreatedDate
+    private Date createdAt;
+
+    @Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    @LastModifiedDate
+    private Date updatedAt;
 	private Category category;
 	private Set<StoreRating> storeRatings = new HashSet<StoreRating>(0);
 	private Set<StoreLike> storeLikes = new HashSet<StoreLike>(0);
@@ -61,7 +71,7 @@ public class Store implements java.io.Serializable {
 	public Store() {
 	}
 
-	public Store(Category category, User user, String name, byte active, double longitude, double latitude,
+	public Store(Category category, User user, String name, Boolean active, double longitude, double latitude,
 			Date openHour, Date closeHour, String image) {
 		this.category = category;
 		this.user = user;
@@ -74,7 +84,7 @@ public class Store implements java.io.Serializable {
 		this.image = image;
 	}
 
-	public Store(Category category, User user, String name, byte active, String description, double longitude,
+	public Store(Category category, User user, String name, Boolean active, String description, double longitude,
 			double latitude, Date openHour, Date closeHour, String image, Date createdAt, Date updatedAt,
 			Set<StoreRating> storeRatings, Set<StoreLike> storeLikes, Set<Product> products) {
 		this.category = category;
@@ -138,11 +148,11 @@ public class Store implements java.io.Serializable {
 	}
 
 	@Column(name = "active", nullable = false)
-	public byte getActive() {
+	public Boolean getActive() {
 		return this.active;
 	}
 
-	public void setActive(byte active) {
+	public void setActive(Boolean active) {
 		this.active = active;
 	}
 

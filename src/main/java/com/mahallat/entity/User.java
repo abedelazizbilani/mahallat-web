@@ -23,6 +23,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.CascadeType;
 
@@ -40,7 +41,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class User implements java.io.Serializable {
 
 	private Integer id;
-	private Role role;
 	@NotEmpty(message="*Please provide your username.")
 	private String username;
 	@NotEmpty(message="Please provide an email")
@@ -51,9 +51,15 @@ public class User implements java.io.Serializable {
 	private String name;
 	@NotEmpty(message="*Please provide your lastname.")
 	private String lastname;
-	@CreatedDate
-	private Date createdAt;
-	private Date updatedAt;
+    @Column(nullable = false, updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    @CreatedDate
+    private Date createdAt;
+
+    @Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    @LastModifiedDate
+    private Date updatedAt;
 	@NotEmpty(message="Provide a password.")
 	private String password;
 	@JsonIgnore
@@ -74,8 +80,7 @@ public class User implements java.io.Serializable {
 	public User() {
 	}
 
-	public User(Role role, String username, String email) {
-		this.role = role;
+	public User(String username, String email) {
 		this.username = username;
 		this.email = email;
 	}
@@ -83,7 +88,7 @@ public class User implements java.io.Serializable {
 	public User(Role role, String username, String email, Integer active, String name, String lastname, Timestamp createdAt,
 			Timestamp updatedAt, Set<ProductRating> productRatings, Set<StoreLike> storeLikes, Set<StoreRating> storeRatings,
 			Set<Comment> comments, Set<ProductLike> productLikes, Set<Store> stores) {
-		this.role = role;
+		
 		this.username = username;
 		this.email = email;
 		this.active = active;

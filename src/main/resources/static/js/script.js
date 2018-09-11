@@ -1,4 +1,4 @@
-demo = {
+myScripts = {
 	initDocumentationCharts : function() {
 		if ($('#dailySalesChart').length != 0
 				&& $('#websiteViewsChart').length != 0) {
@@ -145,108 +145,32 @@ demo = {
 		}
 	},
 
-	initGoogleMaps : function() {
-		var myLatlng = new google.maps.LatLng(33.89,35.48);
+	initGoogleMaps : function(storeLocation) {
+		var myLatlng = new google.maps.LatLng(33.89, 35.48);
 		var mapOptions = {
 			zoom : 13,
 			center : myLatlng,
 			scrollwheel : false, // we disable de scroll over the map, it is
-			// a really annoing when you scroll through
-			// page
-			styles : [ {
-				"featureType" : "water",
-				"stylers" : [ {
-					"saturation" : 43
-				}, {
-					"lightness" : -11
-				}, {
-					"hue" : "#0088ff"
-				} ]
-			}, {
-				"featureType" : "road",
-				"elementType" : "geometry.fill",
-				"stylers" : [ {
-					"hue" : "#ff0000"
-				}, {
-					"saturation" : -100
-				}, {
-					"lightness" : 99
-				} ]
-			}, {
-				"featureType" : "road",
-				"elementType" : "geometry.stroke",
-				"stylers" : [ {
-					"color" : "#808080"
-				}, {
-					"lightness" : 54
-				} ]
-			}, {
-				"featureType" : "landscape.man_made",
-				"elementType" : "geometry.fill",
-				"stylers" : [ {
-					"color" : "#ece2d9"
-				} ]
-			}, {
-				"featureType" : "poi.park",
-				"elementType" : "geometry.fill",
-				"stylers" : [ {
-					"color" : "#ccdca1"
-				} ]
-			}, {
-				"featureType" : "road",
-				"elementType" : "labels.text.fill",
-				"stylers" : [ {
-					"color" : "#767676"
-				} ]
-			}, {
-				"featureType" : "road",
-				"elementType" : "labels.text.stroke",
-				"stylers" : [ {
-					"color" : "#ffffff"
-				} ]
-			}, {
-				"featureType" : "poi",
-				"stylers" : [ {
-					"visibility" : "off"
-				} ]
-			}, {
-				"featureType" : "landscape.natural",
-				"elementType" : "geometry.fill",
-				"stylers" : [ {
-					"visibility" : "on"
-				}, {
-					"color" : "#b8cb93"
-				} ]
-			}, {
-				"featureType" : "poi.park",
-				"stylers" : [ {
-					"visibility" : "on"
-				} ]
-			}, {
-				"featureType" : "poi.sports_complex",
-				"stylers" : [ {
-					"visibility" : "on"
-				} ]
-			}, {
-				"featureType" : "poi.medical",
-				"stylers" : [ {
-					"visibility" : "on"
-				} ]
-			}, {
-				"featureType" : "poi.business",
-				"stylers" : [ {
-					"visibility" : "simplified"
-				} ]
-			} ]
-
+		// a really annoing when you scroll through
+		// page
 		};
 		var marker;
 		var map = new google.maps.Map(document.getElementById("map"),
 				mapOptions);
+
+		
+		if (storeLocation !== "undefined") {
+			marker = new google.maps.Marker({
+				position : {
+					lat : parseFloat(storeLocation.lng),
+					lng : parseFloat(storeLocation.lat)
+				},
+				map : map
+			});
+		}
+
 		map.addListener('click', function(e) {
 			latLng = e.latLng;
-			console.log(e.latLng.lat());
-			console.log(e.latLng.lng());
 			// if marker exists and has a .setMap method, hide it
 			if (marker && marker.setMap) {
 				marker.setMap(null);
@@ -255,7 +179,7 @@ demo = {
 				position : latLng,
 				map : map
 			});
-			setXAndY(e.latLng.lat(),e.latLng.lng())
+			setXAndY(e.latLng.lat(), e.latLng.lng())
 		});
 	},
 	showNotification : function(from, align) {
@@ -281,8 +205,8 @@ demo = {
 
 }
 
-function setXAndY(x,y){
+function setXAndY(x, y) {
 	$('#longitude').val(x);
 	$('#latitude').val(y);
-	
+
 }
