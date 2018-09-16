@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layouts/adminpannellayout.html}" xmlns:th="http://www.thymeleaf.org">
-<head th:include="layouts/admin-pannel-layout :: htmlhead" th:with="title='Stores'"></head>
+<head th:include="layouts/admin-pannel-layout :: htmlhead" th:with="title='Products'"></head>
 <body>
 	<div class="wrapper">
 		<div th:include="layouts/admin-pannel-layout :: sidebar"></div>
@@ -8,8 +8,7 @@
 			<nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
 				<div class="container-fluid">
 					<div class="navbar-wrapper">
-						<a class="navbar-brand" href="#">Stores List</a>
-						<a class="btn btn-primary pull-left" href="/admin/dashboard/store/add">Add Store</a>
+						<a class="navbar-brand" href="#">Products List</a> <a class="btn btn-primary pull-left" href="/admin/dashboard/product/add">Add Product</a>
 					</div>
 				</div>
 			</nav>
@@ -19,7 +18,7 @@
 						<div class="col-md-12">
 							<div class="card card-plain">
 								<div class="card-header card-header-primary">
-									<h4 class="card-title mt-0">Store List</h4>
+									<h4 class="card-title mt-0">Products List</h4>
 								</div>
 								<div class="card-body">
 									<div class="table-responsive">
@@ -31,13 +30,12 @@
 												<th>Actions</th>
 											</thead>
 											<tbody>
-												<tr th:each="store : ${stores}">
-													<td th:text="${store.id}"></td>
-													<td th:text="${store.name}">Dakota Rice</td>
-													<td th:text="${store.description}">Niger</td>
-													<td>
-													<a th:href="@{'/admin/dashboard/store/edit/' + ${store.id}}"><i class="material-icons">edit </i> </a>
-													<a th:href="@{'/admin/dashboard/store/delete/' + ${store.id}}"><i class="material-icons">delete </i></a></td>
+												<tr th:each="product : ${products}">
+													<td th:text="${product.id}"></td>
+													<td th:text="${product.name}"></td>
+													<td th:text="${product.description}"></td>
+													<td><a th:href="@{'/admin/dashboard/product/edit/' + ${product.id}}"><i class="material-icons">edit </i> </a> <a
+														th:href="@{'/admin/dashboard/product/delete/' + ${product.id}}"><i class="material-icons">delete </i></a></td>
 												</tr>
 											</tbody>
 										</table>

@@ -28,4 +28,9 @@ public class ProductService implements IProductService {
 		return true;
 	}
 
+	@Override
+	public List<Product> storeProducts(int id) {
+		return productDao.all(id);
+	}
+	
 }

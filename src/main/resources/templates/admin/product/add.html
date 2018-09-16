@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layouts/adminpannellayout.html}" xmlns:th="http://www.thymeleaf.org">
+<head th:include="layouts/admin-pannel-layout :: htmlhead" th:with="title='New Product'"></head>
+<body>
+	<div class="wrapper">
+		<div th:include="layouts/admin-pannel-layout :: sidebar"></div>
+		<div class="main-panel ps-container ps-theme-default ps-active-y" layout:fragment="main-pannel">
+			<nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
+				<div class="container-fluid">
+					<div class="navbar-wrapper">
+						<a class="navbar-brand" href="#pablo">New Product</a>
+					</div>
+				</div>
+			</nav>
+			<div class="content">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="card">
+								<div class="card-header card-header-primary">
+									<h4 class="card-title">Add Product</h4>
+								</div>
+								<div class="card-body">
+									<form method="post"  enctype="multipart/form-data" th:action="@{/admin/dashboard/product/add}">
+										<div class="row">
+											<div class="col-md-6">
+												<div class="form-group">
+													<label class="bmd-label-floating">Name</label> <input type="text" th:field="*{product.name}" class="form-control" /> <label
+														th:if="${#fields.hasErrors('product.name')}" th:errors="*{product.name}" class="validation-message"></label>
+												</div>
+											</div>
+											<div class="col-md-6">
+												<div class="form-group">
+													<div class="fileinput fileinput-new text-center" data-provides="fileinput">
+														<div class="fileinput-new thumbnail img-raised">
+															<img src="https://epicattorneymarketing.com/wp-content/uploads/2016/07/Headshot-Placeholder-1.png" alt="...">
+														</div>
+														<div class="fileinput-preview fileinput-exists thumbnail img-raised"></div>
+														<div>
+															<span class="btn btn-raised btn-round btn-default btn-file"> <span class="fileinput-new">Select image</span> <span
+																class="fileinput-exists">Change</span> <input type="file" name="file" />
+															</span> <a href="#pablo" class="btn btn-danger btn-round fileinput-exists" data-dismiss="fileinput"> <i class="fa fa-times"></i> Remove
+															</a>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-12">
+												<div class="form-group">
+													<label>Description</label>
+													<div class="form-group">
+														<label class="bmd-label-floating"> Kindly add a short description for the product</label>
+														<textarea class="form-control" rows="5" th:field="*{product.description}"></textarea>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-6">
+												<div class="form-group">
+													<label class="bmd-label-floating">Price in $</label> <input type="number" th:field="*{product.price}" class="form-control" /> <label
+														th:if="${#fields.hasErrors('product.price')}" th:errors="*{product.price}" class="validation-message"></label>
+												</div>
+											</div>
+										</div>
+										<input th:value="${store.id}" th:field="*{product.store.id}" type="hidden" class="hidden">
+										<button type="submit" class="btn btn-primary pull-right">Add Product</button>
+										<div class="clearfix"></div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div th:include="layouts/admin-pannel-layout :: footer"></div>
+		</div>
+	</div>
+</body>
+</html>

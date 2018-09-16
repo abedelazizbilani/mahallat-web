@@ -47,10 +47,10 @@ public class StoreDao implements IStoreDao {
 	public void save(Store store) {
 		entityManager.persist(store);
 	}
-	
+
 	@Override
 	public void update(Store store) {
-		
+
 		Store storeExist = one(store.getId());
 		storeExist.setName(store.getName());
 		storeExist.setDescription(store.getDescription());
@@ -61,16 +61,16 @@ public class StoreDao implements IStoreDao {
 		storeExist.setOpenHour(store.getOpenHour());
 		storeExist.setCloseHour(store.getCloseHour());
 		storeExist.setCategory(store.getCategory());
-		
+
 		entityManager.flush();
 	}
-	
 
 	@Override
 	public boolean userHasStore(int id) {
-		String hql = "FROM Store as store where store.user_id = ? ";
+		String hql = "FROM Store as store where store.user.id = ? ";
 		int count = entityManager.createQuery(hql).setParameter(1, id).getResultList().size();
-		// check if user has store if bigger than zero than he has a store => cannot create a store
+		// check if user has store if bigger than zero than he has a store => cannot
+		// create a store
 		return count > 0 ? true : false;
 	}
 
@@ -80,5 +80,11 @@ public class StoreDao implements IStoreDao {
 		int count = entityManager.createQuery(hql).setParameter(1, user_id).setParameter(2, store_id).getResultList()
 				.size();
 		return count > 0 ? false : true;
+	}
+
+	@Override
+	public Store storeByUserId(int id) {
+		String hql = "FROM Store as store where store.user.id = ? ";
+		return (Store) entityManager.createQuery(hql).setParameter(1, id).getSingleResult();
 	}
 }

@@ -11,29 +11,19 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.MessageSource;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.mahallat.entity.Category;
 import com.mahallat.entity.Store;
 import com.mahallat.entity.User;
-import com.mahallat.models.UserUpdate;
 import com.mahallat.services.CategoryService;
 import com.mahallat.services.StoreService;
 import com.mahallat.services.UserService;
@@ -147,6 +137,7 @@ public class StoreController {
 		if (storeExists == null) {
 			return new ModelAndView("redirect:/admin/dashboard/stores");
 		} else {
+			store.setImage(storeExists.getImage());
 			if (!file.isEmpty()) {
 				try {
 					String imagePath = storeImagesPath + file.getOriginalFilename();
@@ -160,8 +151,7 @@ public class StoreController {
 					e.printStackTrace();
 				}
 			}
-			store.setImage(storeExists.getImage());
-			store.setActive(store.getActive() == null ? false : true );
+			store.setActive(store.getActive() == null ? false : true);
 			store.setCategory(categoryService.one((categoryId)));
 			storeService.update(store);
 		}

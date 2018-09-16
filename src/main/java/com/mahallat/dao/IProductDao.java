@@ -9,5 +9,5 @@ public interface IProductDao {
 	Product one(int id);
 	boolean ratingExist(int user_id , int product_id);
 	void rate(ProductRating productRating);
-	
+	List <Product> all(int id);
 }

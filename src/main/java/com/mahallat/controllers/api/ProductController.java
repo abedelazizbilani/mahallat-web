@@ -1,9 +1,6 @@
 package com.mahallat.controllers.api;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -19,7 +16,8 @@ import com.mahallat.entity.Product;
 import com.mahallat.entity.ProductRating;
 import com.mahallat.services.IProductService;
 
-@RestController
+
+@RestController("api-product-controller")
 @RequestMapping(value = "api")
 @CrossOrigin
 public class ProductController {

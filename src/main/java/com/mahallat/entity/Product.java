@@ -16,6 +16,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -29,11 +32,14 @@ public class Product implements java.io.Serializable {
 
 	private Integer id;
 	private Store store;
+	@NotBlank
 	private String name;
 	private byte active;
 	private Date createdAt;
 	private Date updatedAt;
 	private String image;
+	@NotNull
+	@Min(1)
 	private float price;
 	private String description;
 	private Set<Offers> offerses = new HashSet<Offers>(0);

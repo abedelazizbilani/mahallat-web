@@ -57,4 +57,9 @@ public class StoreService implements IStoreService {
 		return true;
 	}
 
+	@Override
+	public Store storeByUserId(int id) {
+		return storeDAO.storeByUserId(id);
+	}
+
 }

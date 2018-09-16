@@ -9,10 +9,12 @@ import com.mahallat.entity.StoreRating;;
 public interface IStoreDao{
 	List<Store> getAllStores();
 	Store one(int id);
+	Store storeByUserId(int id);
 	void save (Store store);
 	void update (Store store);
 	List<Product> getAllProductsByStoreId(int id);
 	void rate(StoreRating storeRating);
 	boolean ratingExist(int user_id, int store_id);
 	boolean userHasStore(int id);
+	
 }
