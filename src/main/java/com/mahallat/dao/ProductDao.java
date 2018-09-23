@@ -8,6 +8,7 @@ import javax.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 import com.mahallat.entity.Product;
 import com.mahallat.entity.ProductRating;
+import com.mahallat.entity.Store;
 
 @Transactional(rollbackOn = Exception.class)
 @Repository("productDao")
@@ -41,4 +42,19 @@ public class ProductDao implements IProductDao {
 		return products;
 	}
 
+	@Override
+	public void save (Product product) {
+		entityManager.persist(product);
+	}
+	
+	@Override 
+	public void update (Product product) {
+		Product productExist = one(product.getId());
+		productExist.setName(product.getName());
+		productExist.setDescription(product.getDescription());
+		//productExist.setActive(product.getActive());
+		productExist.setImage(product.getImage());
+		productExist.setPrice(product.getPrice());
+		entityManager.flush();
+	}
 }

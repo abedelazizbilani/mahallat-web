@@ -38,7 +38,7 @@ public class StoreController {
 	@Autowired
 	UserService userService;
 
-	@Value("${spring.file.uploads.path}")
+	@Value("${spring.file.uploads.path.products}")
 	private String storeImagesPath;
 
 	@GetMapping("/admin/dashboard/stores")
@@ -83,16 +83,21 @@ public class StoreController {
 			modelAndView.setViewName("admin/store/add");
 		} else {
 			try {
-				// Get the file and save it somewhere
-				String imagePath = storeImagesPath + file.getOriginalFilename();
-				String type = file.getContentType().split("/")[1];
-				String newImageName = UUID.randomUUID().toString() + "." + type;
-				byte[] bytes = file.getBytes();
-				Path path = Paths.get(imagePath);
-				Files.write(path.resolveSibling(newImageName), bytes);
-
-				store.setImage("uploads/stores/" + newImageName);
-
+				
+				if(!file.isEmpty()) {
+					// Get the file and save it somewhere
+					String imagePath = storeImagesPath + file.getOriginalFilename();
+					String type = file.getContentType().split("/")[1];
+					String newImageName = UUID.randomUUID().toString() + "." + type;
+					byte[] bytes = file.getBytes();
+					Path path = Paths.get(imagePath);
+					Files.write(path.resolveSibling(newImageName), bytes);
+					store.setImage("uploads/stores/" + newImageName);
+		
+				}
+			
+				
+				
 				store.setActive(store.getActive());
 				store.setCategory(categoryService.one((categoryId)));
 				store.setUser(userService.findById(userId));

@@ -18,6 +18,10 @@
 							store_mall_directory </i>
 						<p>Stores List</p>
 				</a></li>
+				<li sec:authorize="hasAuthority('ADMIN')" class="nav-item "><a class="nav-link" th:href="@{~/admin/dashboard/products}"> <i class="material-icons">
+							store_mall_directory </i>
+						<p>Products</p>
+				</a></li>
 				<li sec:authorize="hasAuthority('ADMIN')" class="nav-item "><a class="nav-link" th:href="@{~/admin/dashboard/categories}"> <i
 						class="material-icons"> category </i>
 						<p>Store Categories</p>

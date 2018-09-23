@@ -10,4 +10,6 @@ public interface IProductDao {
 	boolean ratingExist(int user_id , int product_id);
 	void rate(ProductRating productRating);
 	List <Product> all(int id);
+	void save(Product product);
+	void update (Product product);
 }

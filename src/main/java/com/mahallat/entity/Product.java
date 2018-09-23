@@ -34,7 +34,7 @@ public class Product implements java.io.Serializable {
 	private Store store;
 	@NotBlank
 	private String name;
-	private byte active;
+	private Boolean active;
 	private Date createdAt;
 	private Date updatedAt;
 	private String image;
@@ -50,7 +50,7 @@ public class Product implements java.io.Serializable {
 	public Product() {
 	}
 
-	public Product(Store store, String name, byte active, Date createdAt, String image, float price,
+	public Product(Store store, String name, Boolean active, Date createdAt, String image, float price,
 			String description) {
 		this.store = store;
 		this.name = name;
@@ -61,7 +61,7 @@ public class Product implements java.io.Serializable {
 		this.description = description;
 	}
 
-	public Product(Store store, String name, byte active, Date createdAt, Date updatedAt, String image, float price,
+	public Product(Store store, String name, Boolean active, Date createdAt, Date updatedAt, String image, float price,
 			String description, Set<Offers> offerses, Set<Comment> comments, Set<ProductRating> productRatings,
 			Set<ProductLike> productLikes) {
 		this.store = store;
@@ -110,11 +110,11 @@ public class Product implements java.io.Serializable {
 	}
 
 	@Column(name = "active", nullable = false)
-	public byte getActive() {
+	public Boolean getActive() {
 		return this.active;
 	}
 
-	public void setActive(byte active) {
+	public void setActive(Boolean active) {
 		this.active = active;
 	}
 

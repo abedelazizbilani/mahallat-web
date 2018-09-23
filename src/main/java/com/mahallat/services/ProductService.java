@@ -33,4 +33,13 @@ public class ProductService implements IProductService {
 		return productDao.all(id);
 	}
 	
+	@Override
+	public void save (Product product) {
+		productDao.save(product);
+	}
+	
+	@Override 
+	public void update (Product product) {
+		productDao.update(product);
+	}
 }

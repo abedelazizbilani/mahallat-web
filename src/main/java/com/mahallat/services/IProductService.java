@@ -9,4 +9,6 @@ public interface IProductService {
 	Product one(int id);
 	boolean rate(ProductRating productRating);
 	List <Product> storeProducts(int id);
+	void save(Product product);
+	void update(Product product);
 }

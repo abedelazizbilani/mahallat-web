@@ -15,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -73,7 +74,7 @@ public class User implements java.io.Serializable {
 	@JsonIgnore
 	private Set<ProductLike> productLikes = new HashSet<ProductLike>(0);
 	@JsonIgnore
-	private Set<Store> stores = new HashSet<Store>(0);
+	private Store store = new Store();
 	private Set<Role> roles;
 	private String image;
 
@@ -87,7 +88,7 @@ public class User implements java.io.Serializable {
 
 	public User(Role role, String username, String email, Integer active, String name, String lastname, Timestamp createdAt,
 			Timestamp updatedAt, Set<ProductRating> productRatings, Set<StoreLike> storeLikes, Set<StoreRating> storeRatings,
-			Set<Comment> comments, Set<ProductLike> productLikes, Set<Store> stores) {
+			Set<Comment> comments, Set<ProductLike> productLikes, Store store) {
 		
 		this.username = username;
 		this.email = email;
@@ -101,7 +102,7 @@ public class User implements java.io.Serializable {
 		this.storeRatings = storeRatings;
 		this.comments = comments;
 		this.productLikes = productLikes;
-		this.stores = stores;
+		this.store = store;
 	}
 
 	@Id
@@ -260,14 +261,14 @@ public class User implements java.io.Serializable {
 		this.productLikes = productLikes;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "user")
 	@JsonBackReference
-	public Set<Store> getStores() {
-		return this.stores;
+	public Store getStore() {
+		return this.store;
 	}
 
-	public void setStores(Set<Store> stores) {
-		this.stores = stores;
+	public void setStore(Store store) {
+		this.store = store;
 	}
 
 }

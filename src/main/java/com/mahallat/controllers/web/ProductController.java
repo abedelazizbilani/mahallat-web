@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,7 +22,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fasterxml.jackson.annotation.JsonCreator.Mode;
 import com.mahallat.entity.Product;
+import com.mahallat.entity.Store;
 import com.mahallat.entity.User;
 import com.mahallat.services.ProductService;
 import com.mahallat.services.StoreService;
@@ -40,10 +43,13 @@ public class ProductController {
 	@Value("${spring.file.uploads.path.products}")
 	private String storeImagesPath;
 
-	@GetMapping(value = "/admin/dashboard/{id}/products")
-	public ModelAndView index(@PathVariable("id") int id) {
+	@GetMapping(value = "/admin/dashboard/products")
+	public ModelAndView index() {
+		User user = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+
 		ModelAndView modelAndView = new ModelAndView();
-		List<Product> productList = productService.storeProducts(id);
+
+		List<Product> productList = productService.storeProducts(user.getStore().getId());
 		modelAndView.addObject("products", productList);
 		modelAndView.setViewName("admin/product/index");
 		return modelAndView;
@@ -65,31 +71,93 @@ public class ProductController {
 	}
 
 	@PostMapping(value = "/admin/dashboard/product/add")
-	public ModelAndView add(@Valid Product product, BindingResult bindingResult, @RequestParam MultipartFile file) {
+	public ModelAndView add(@Valid Product product, BindingResult bindingResult, @RequestParam MultipartFile file,
+			@RequestParam("store_id") int storeId) {
 		ModelAndView modelAndView = new ModelAndView("redirect:/admin/dashboard/product/add");
+		User user = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
 		if (bindingResult.hasErrors()) {
-			User user = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
 			modelAndView.addObject("store", storeService.storeByUserId(user.getId()));
 			modelAndView.setViewName("admin/product/add");
 		} else {
 			try {
-				// Get the file and save it somewhere
-				String imagePath = storeImagesPath + file.getOriginalFilename();
-				String type = file.getContentType().split("/")[1];
-				String newImageName = UUID.randomUUID().toString() + "." + type;
-				byte[] bytes = file.getBytes();
-				Path path = Paths.get(imagePath);
-				Files.write(path.resolveSibling(newImageName), bytes);
+				if (!file.isEmpty()) {
+					// Get the file and save it somewhere
+					String imagePath = storeImagesPath + file.getOriginalFilename();
+					String type = file.getContentType().split("/")[1];
+					String newImageName = UUID.randomUUID().toString() + "." + type;
+					byte[] bytes = file.getBytes();
+					Path path = Paths.get(imagePath);
+					Files.write(path.resolveSibling(newImageName), bytes);
 
-				product.setImage("uploads/products/" + newImageName);
-
+					product.setImage("uploads/products/" + newImageName);
+				} else {
+					product.setImage("/default.png");
+				}
 				product.setActive(product.getActive());
-				//product.setStore(product.setStore(store));
+				product.setStore(user.getStore());
+				product.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			//productService.save(product);
+			productService.save(product);
+		}
+		return modelAndView;
+	}
+
+	@GetMapping(value = "/admin/dashboard/product/edit/{id}")
+	public ModelAndView edit(@PathVariable("id") int id) {
+		ModelAndView modelAndView = new ModelAndView();
+
+		User user = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+		Product product = productService.one(id);
+
+		if (product == null) {
+			return new ModelAndView("redirect:/admin/dashboard/products");
+		}
+		modelAndView.addObject("user",
+				userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName()));
+		modelAndView.addObject("product", product);
+		modelAndView.addObject("store", storeService.storeByUserId(user.getId()));
+		modelAndView.setViewName("admin/product/edit");
+		return modelAndView;
+	}
+
+	@PostMapping(value = "/admin/dashboard/product/edit")
+	public ModelAndView edit(@Valid Product product, BindingResult bindingResult, @RequestParam MultipartFile file,
+			@RequestParam("store_id") int storeId) {
+		ModelAndView modelAndView = new ModelAndView("redirect:/admin/dashboard/products");
+
+		User user = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+
+		if (bindingResult.hasErrors()) {
+			modelAndView.addObject("product", product);
+			modelAndView.addObject("user",
+					userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName()));
+			modelAndView.addObject("store", storeService.storeByUserId(user.getId()));
+			modelAndView.setViewName("admin/product/edit");
+		}
+
+		Product productExists = productService.one(product.getId());
+		if (productExists == null) {
+			return new ModelAndView("redirect:/admin/dashboard/stores");
+		} else {
+			product.setImage(productExists.getImage());
+			if (!file.isEmpty()) {
+				try {
+					String imagePath = storeImagesPath + file.getOriginalFilename();
+					String type = file.getContentType().split("/")[1];
+					String newImageName = UUID.randomUUID().toString() + "." + type;
+					byte[] bytes = file.getBytes();
+					Path path = Paths.get(imagePath);
+					Files.write(path.resolveSibling(newImageName), bytes);
+					product.setImage("uploads/stores/" + newImageName);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			product.setActive(product.getActive() == null ? false : true);
+			productService.update(product);
 		}
 		return modelAndView;
 	}
