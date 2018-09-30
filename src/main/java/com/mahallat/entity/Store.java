@@ -4,6 +4,8 @@ package com.mahallat.entity;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -127,7 +129,7 @@ public class Store implements java.io.Serializable {
 		this.category = category;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(cascade=CascadeType.DETACH,fetch = FetchType.LAZY)
 	@JsonManagedReference
 	@JoinColumn(name = "user_id", nullable = false)
 	public User getUser() {

@@ -66,7 +66,7 @@ public class UserController {
 			if (user.getImage() != "") {
 				userExists.setImage(user.getImage());
 			}
-			userService.saveUser(userExists);
+			userService.saveUser(userExists , "STORE");
 			modelAndView.addObject("users", userService.findStoreUsers());
 			modelAndView.setViewName("admin/users/index");
 		}

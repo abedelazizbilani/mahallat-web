@@ -1,6 +1,7 @@
 package com.mahallat.entity;
 // Generated Aug 15, 2018 4:23:34 AM by Hibernate Tools 5.1.8.Final
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -46,7 +47,7 @@ public class StoreLike implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(cascade=CascadeType.ALL,fetch = FetchType.LAZY)
 	@JsonManagedReference
 	@JoinColumn(name = "store_id")
 	public Store getStore() {
@@ -57,7 +58,7 @@ public class StoreLike implements java.io.Serializable {
 		this.store = store;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(cascade=CascadeType.ALL,fetch = FetchType.LAZY)
 	@JsonManagedReference
 	@JoinColumn(name = "user_id")
 	public User getUser() {

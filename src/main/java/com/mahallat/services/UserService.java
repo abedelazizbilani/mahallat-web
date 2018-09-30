@@ -64,13 +64,17 @@ public class UserService implements UserDetailsService, IUserService {
 	}
 
 	@Override
-	public void saveUser(User user) {
+	public boolean saveUser(User user , String role) {
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 		user.setActive(0);
 		user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
-		Role userRole = roleDao.findByName("STORE");
+		Role userRole = roleDao.findByName(role);
 		user.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
-		userDAO.save(user);
+		if (userDAO.save(user)!=null) {
+			return true;
+		}
+		return false;
+		
 	}
 
 	@Override

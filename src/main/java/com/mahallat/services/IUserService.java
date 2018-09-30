@@ -10,7 +10,7 @@ public interface IUserService {
 
 	public User findUserByEmail(String email);
 
-	public void saveUser(User user);
+	public boolean saveUser(User user, String role);
 
 	public List<User> findStoreUsers();
 

@@ -74,7 +74,7 @@ public class User implements java.io.Serializable {
 	@JsonIgnore
 	private Set<ProductLike> productLikes = new HashSet<ProductLike>(0);
 	@JsonIgnore
-	private Store store = new Store();
+	private Set<Store> stores = new HashSet<Store>(0);
 	private Set<Role> roles;
 	private String image;
 
@@ -88,7 +88,7 @@ public class User implements java.io.Serializable {
 
 	public User(Role role, String username, String email, Integer active, String name, String lastname, Timestamp createdAt,
 			Timestamp updatedAt, Set<ProductRating> productRatings, Set<StoreLike> storeLikes, Set<StoreRating> storeRatings,
-			Set<Comment> comments, Set<ProductLike> productLikes, Store store) {
+			Set<Comment> comments, Set<ProductLike> productLikes, Set<Store> store) {
 		
 		this.username = username;
 		this.email = email;
@@ -102,7 +102,7 @@ public class User implements java.io.Serializable {
 		this.storeRatings = storeRatings;
 		this.comments = comments;
 		this.productLikes = productLikes;
-		this.store = store;
+		this.stores = store;
 	}
 
 	@Id
@@ -117,7 +117,7 @@ public class User implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToMany(cascade=CascadeType.DETACH, fetch=FetchType.LAZY) //delete user and user_role, not delete role	
+	@ManyToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY) //delete user and user_role, not delete role	
 	@JoinTable(name = "user_role", 
 		joinColumns = { @JoinColumn(name = "user_id",  nullable = false) }, 
 		inverseJoinColumns = { @JoinColumn(name = "role_id",  nullable = false) })
@@ -261,14 +261,14 @@ public class User implements java.io.Serializable {
 		this.productLikes = productLikes;
 	}
 
-	@OneToOne(fetch = FetchType.LAZY, mappedBy = "user")
+	@OneToMany(cascade=CascadeType.ALL,fetch = FetchType.LAZY)
 	@JsonBackReference
-	public Store getStore() {
-		return this.store;
+	public Set<Store> getStore() {
+		return this.stores;
 	}
 
-	public void setStore(Store store) {
-		this.store = store;
+	public void setStore(Set<Store> store) {
+		this.stores = store;
 	}
 
 }
