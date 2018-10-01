@@ -74,7 +74,7 @@ public class User implements java.io.Serializable {
 	@JsonIgnore
 	private Set<ProductLike> productLikes = new HashSet<ProductLike>(0);
 	@JsonIgnore
-	private Set<Store> stores = new HashSet<Store>(0);
+	private Set<Store> stores;
 	private Set<Role> roles;
 	private String image;
 

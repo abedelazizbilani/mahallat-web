@@ -49,7 +49,7 @@ public class ProductController {
 
 		ModelAndView modelAndView = new ModelAndView();
 
-		List<Product> productList = productService.storeProducts(user.getStore().getId());
+		List<Product> productList = productService.storeProducts(((Product) user.getStore()).getId());
 		modelAndView.addObject("products", productList);
 		modelAndView.setViewName("admin/product/index");
 		return modelAndView;
@@ -94,7 +94,7 @@ public class ProductController {
 					product.setImage("/default.png");
 				}
 				product.setActive(product.getActive());
-				product.setStore(user.getStore());
+				product.setStore((Store) user.getStore());
 				product.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 
 			} catch (IOException e) {
