@@ -1,5 +1,6 @@
 package com.mahallat.controllers.api;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,7 +34,7 @@ public class UserController {
 
 	@PostMapping("user/register")
 	@Transactional
-	public ResponseEntity<String> register(@RequestBody @Valid Register register) {
+	public ResponseEntity<HashMap> register(@RequestBody @Valid Register register) {
 
 		User user = new User();
 		user.setName(register.getUsername());
@@ -42,12 +43,19 @@ public class UserController {
 		user.setUsername(register.getUsername());
 		user.setPassword(register.getPassword());
 
-		boolean flag = userService.saveUser(user, "MOBILE");
-
-		if (!flag) {
-			return new ResponseEntity<String>("there is an error",HttpStatus.CONFLICT);
+		if(userService.findUserByEmail(register.getEmail())!= null) {
+			HashMap<String, String> response = new HashMap<>();
+			response.put("status", "error");
+			response.put("message", "user already exist");
+			return new ResponseEntity<HashMap>(response, HttpStatus.CONFLICT);
 		}
-		return new ResponseEntity<String>("success",HttpStatus.CREATED);
+		
+		userService.saveUser(user, "MOBILE");
+		HashMap<String, String> response = new HashMap<>();
+		response.put("status", "success");
+		response.put("status", "user has been registered");
+
+		return new ResponseEntity<HashMap>(response, HttpStatus.CREATED);
 	}
 
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
