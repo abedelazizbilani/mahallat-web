@@ -75,7 +75,6 @@ public class PasswordController {
 
 		modelAndView.setViewName("forgot-password");
 		return modelAndView;
-
 	}
 	
 	// Display form to reset password
