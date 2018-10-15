@@ -20,11 +20,11 @@ public class ProductService implements IProductService {
 	}
 
 	@Override
-	public boolean rate(ProductRating productRating) {
-		if (productDao.ratingExist(productRating.getUser().getId(), productRating.getProduct().getId())) {
+	public int ratingExist(int userId , int productId) {
+		if (productDao.ratingExist(userId, productId)) {
 			return false;
 		}
-		productDao.rate(productRating);
+		productDao.rate();
 		return true;
 	}
 
@@ -41,5 +41,11 @@ public class ProductService implements IProductService {
 	@Override 
 	public void update (Product product) {
 		productDao.update(product);
+	}
+	
+	@Override
+	public Integer getProductLikesCount(Integer id)
+	{
+		return productDao.productLikes(id);
 	}
 }

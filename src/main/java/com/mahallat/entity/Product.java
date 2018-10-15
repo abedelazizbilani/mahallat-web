@@ -21,6 +21,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 /**
@@ -89,6 +90,7 @@ public class Product implements java.io.Serializable {
 	public void setId(Integer id) {
 		this.id = id;
 	}
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JsonManagedReference
 	@JoinColumn(name = "store_id", nullable = false)

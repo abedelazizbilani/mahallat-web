@@ -126,16 +126,6 @@ public class Role implements java.io.Serializable {
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
 	}
-
-//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "role")
-//	@JsonBackReference
-//	public Set<User> getUsers() {
-//		return this.users;
-//	}
-//
-//	public void setUsers(Set<User> users) {
-//		this.users = users;
-//	}
 	
 	@ManyToMany(mappedBy = "roles")	
 	@JsonBackReference

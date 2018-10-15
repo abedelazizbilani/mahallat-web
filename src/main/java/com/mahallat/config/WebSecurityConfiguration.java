@@ -47,10 +47,13 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter{
 		http.
 			authorizeRequests()
 				.antMatchers("/").permitAll()
-				.antMatchers("/api/stores").permitAll()
 				.antMatchers("/forgot").permitAll()
 				.antMatchers("/reset").permitAll()
+				.antMatchers("/api/stores").permitAll()
 				.antMatchers("/api/store/**").permitAll()
+				.antMatchers("/api/product/likes/**").permitAll()
+				.antMatchers("/api/product/**").permitAll()
+				.antMatchers("/api/product/rate").hasAuthority("MOBILE").anyRequest().authenticated()
 				.antMatchers("/api/categories").permitAll()
 				.antMatchers("/api/user/register").permitAll()
 				.antMatchers("/login").permitAll()
@@ -64,17 +67,18 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter{
 				.and().logout()
 				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
 				.logoutSuccessUrl("/").and().exceptionHandling()
-				.accessDeniedPage("/access-denied");
+				.accessDeniedPage("/access-denied").and().httpBasic();
 	}
 	
 	@Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) 
       throws Exception {
-        auth
-          .inMemoryAuthentication()
-          .withUser("user").password(bCryptPasswordEncoder.encode("password")).roles("STORE")
+        auth.inMemoryAuthentication()
+          .withUser("email").password(bCryptPasswordEncoder.encode("password")).roles("STORE")
           .and()
-          .withUser("admin").password(bCryptPasswordEncoder.encode("admin")).roles("ADMIN");
+          .withUser("email").password(bCryptPasswordEncoder.encode("password")).roles("ADMIN")
+          .and()
+          .withUser("email").password(bCryptPasswordEncoder.encode("password")).roles("MOBILE");
     }
 	
 	@Override

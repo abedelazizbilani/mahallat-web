@@ -75,7 +75,7 @@ public class User implements java.io.Serializable {
 	@JsonIgnore
 	private Set<ProductLike> productLikes = new HashSet<ProductLike>(0);
 	@JsonIgnore
-	private Set<Store> stores;
+	private Store store;
 	private Set<Role> roles;
 	private String image;
 
@@ -89,7 +89,7 @@ public class User implements java.io.Serializable {
 
 	public User(Role role, String username, String email, Integer active, String name, String lastname,
 			Timestamp createdAt, Timestamp updatedAt, Set<ProductRating> productRatings, Set<StoreLike> storeLikes,
-			Set<StoreRating> storeRatings, Set<Comment> comments, Set<ProductLike> productLikes, Set<Store> store) {
+			Set<StoreRating> storeRatings, Set<Comment> comments, Set<ProductLike> productLikes, Store store) {
 
 		this.username = username;
 		this.email = email;
@@ -103,7 +103,7 @@ public class User implements java.io.Serializable {
 		this.storeRatings = storeRatings;
 		this.comments = comments;
 		this.productLikes = productLikes;
-		this.stores = store;
+		this.store = store;
 	}
 
 	@Id
@@ -175,7 +175,7 @@ public class User implements java.io.Serializable {
 	public void setLastname(String lastname) {
 		this.lastname = lastname;
 	}
-
+	@JsonIgnore
 	@Column(name = "password")
 	public String getPassword() {
 		return password;
@@ -193,7 +193,7 @@ public class User implements java.io.Serializable {
 	public void setImage(String image) {
 		this.image = image;
 	}
-
+	@JsonIgnore
 	public String getResetToken() {
 		return resetToken;
 	}
@@ -201,7 +201,7 @@ public class User implements java.io.Serializable {
 	public void setResetToken(String resetToken) {
 		this.resetToken = resetToken;
 	}
-
+	@JsonIgnore
 	@Temporal(TemporalType.DATE)
 	@Column(name = "created_at", length = 10)
 	public Date getCreatedAt() {
@@ -211,7 +211,7 @@ public class User implements java.io.Serializable {
 	public void setCreatedAt(Date createdAt) {
 		this.createdAt = createdAt;
 	}
-
+	@JsonIgnore
 	@Temporal(TemporalType.DATE)
 	@Column(name = "updated_at", length = 10)
 	public Date getUpdatedAt() {
@@ -272,14 +272,14 @@ public class User implements java.io.Serializable {
 		this.productLikes = productLikes;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToOne(mappedBy="user",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JsonBackReference
-	public Set<Store> getStore() {
-		return this.stores;
+	public Store getStore() {
+		return this.store;
 	}
 
-	public void setStore(Set<Store> store) {
-		this.stores = store;
+	public void setStore(Store store) {
+		this.store = store;
 	}
 
 }

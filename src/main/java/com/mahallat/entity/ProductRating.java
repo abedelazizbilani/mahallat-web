@@ -14,6 +14,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 /**
@@ -63,6 +64,7 @@ public class ProductRating implements java.io.Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JsonManagedReference
 	@JoinColumn(name = "product_id", nullable = false)
+	@JsonIgnore
 	public Product getProduct() {
 		return this.product;
 	}
@@ -74,6 +76,7 @@ public class ProductRating implements java.io.Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JsonManagedReference
 	@JoinColumn(name = "user_id", nullable = false)
+	@JsonIgnore
 	public User getUser() {
 		return this.user;
 	}

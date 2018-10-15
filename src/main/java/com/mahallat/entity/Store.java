@@ -65,6 +65,7 @@ public class Store implements java.io.Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @LastModifiedDate
     private Date updatedAt;
+    @JsonIgnore
 	private Category category;
 	private Set<StoreRating> storeRatings = new HashSet<StoreRating>(0);
 	private Set<StoreLike> storeLikes = new HashSet<StoreLike>(0);
@@ -131,11 +132,12 @@ public class Store implements java.io.Serializable {
 
 	@ManyToOne(cascade=CascadeType.DETACH,fetch = FetchType.LAZY)
 	@JsonManagedReference
+	@JsonIgnore
 	@JoinColumn(name = "user_id", nullable = false)
 	public User getUser() {
 		return this.user;
 	}
-
+	@JsonIgnore
 	public void setUser(User user) {
 		this.user = user;
 	}

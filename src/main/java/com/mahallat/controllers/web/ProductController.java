@@ -49,7 +49,7 @@ public class ProductController {
 
 		ModelAndView modelAndView = new ModelAndView();
 
-		List<Product> productList = productService.storeProducts(((Product) user.getStore()).getId());
+		List<Product> productList = productService.storeProducts((user.getStore()).getId());
 		modelAndView.addObject("products", productList);
 		modelAndView.setViewName("admin/product/index");
 		return modelAndView;

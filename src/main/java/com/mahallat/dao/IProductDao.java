@@ -7,9 +7,10 @@ import com.mahallat.entity.ProductRating;
 
 public interface IProductDao {
 	Product one(int id);
-	boolean ratingExist(int user_id , int product_id);
+	int ratingExist(int userId , int productId);
 	void rate(ProductRating productRating);
 	List <Product> all(int id);
 	void save(Product product);
 	void update (Product product);
+	Integer productLikes(int id);
 }
