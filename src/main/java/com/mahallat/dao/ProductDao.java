@@ -1,5 +1,6 @@
 package com.mahallat.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -8,9 +9,7 @@ import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 import com.mahallat.entity.Product;
-import com.mahallat.entity.ProductLike;
 import com.mahallat.entity.ProductRating;
-import com.mahallat.entity.Store;
 
 @Transactional(rollbackOn = Exception.class)
 @Repository("productDao")
@@ -23,14 +22,14 @@ public class ProductDao implements IProductDao {
 		return entityManager.find(Product.class, id);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public int ratingExist(int userId, int productId) {
-		String hql = "From ProductRating as productRating where productRating.user_id = ? and productRating.product_id = ?";
-		ProductRating rating = (ProductRating)entityManager.createQuery(hql).setParameter(1, userId).setParameter(2, productId).getResultList();
-		if(rating == null) {
-			return rating.getRate();
-		}
-		return 0;
+	public boolean ratingExist(int userId, int productId) {
+		List<ProductRating> rating = new ArrayList<ProductRating>();
+		String hql = "From ProductRating as productRating where productRating.user.id= ? and productRating.product.id = ?";
+		int count = entityManager.createQuery(hql).setParameter(1, userId).setParameter(2, productId).getResultList()
+				.size();
+		return count > 0 ? true : false;
 	}
 
 	@Override
@@ -47,12 +46,12 @@ public class ProductDao implements IProductDao {
 	}
 
 	@Override
-	public void save (Product product) {
+	public void save(Product product) {
 		entityManager.persist(product);
 	}
-	
-	@Override 
-	public void update (Product product) {
+
+	@Override
+	public void update(Product product) {
 		Product productExist = one(product.getId());
 		productExist.setName(product.getName());
 		productExist.setDescription(product.getDescription());
@@ -61,11 +60,11 @@ public class ProductDao implements IProductDao {
 		productExist.setPrice(product.getPrice());
 		entityManager.flush();
 	}
-	
+
 	@Override
 	public Integer productLikes(int id) {
 		String hql = "select product.productLikes From Product as product where product.id= ?";
-		return (int)entityManager.createQuery(hql).setParameter(1,id).getResultList().size();
+		return (int) entityManager.createQuery(hql).setParameter(1, id).getResultList().size();
 	}
-	
+
 }

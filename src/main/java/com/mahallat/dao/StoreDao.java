@@ -1,5 +1,6 @@
 package com.mahallat.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.mahallat.entity.Category;
 import com.mahallat.entity.Product;
+import com.mahallat.entity.ProductRating;
 import com.mahallat.entity.Store;
 import com.mahallat.entity.StoreRating;
 
@@ -75,11 +77,11 @@ public class StoreDao implements IStoreDao {
 	}
 
 	@Override
-	public boolean ratingExist(int user_id, int store_id) {
-		String hql = "From StoreRating as storeRating where storeRating.user_id = ? and storeRating.store_id = ?";
-		int count = entityManager.createQuery(hql).setParameter(1, user_id).setParameter(2, store_id).getResultList()
+	public boolean ratingExist(int userId, int storeId) {
+		String hql = "From StoreRating as storeRating where storeRating.user.id = ? and storeRating.store.id = ?";
+		int count = entityManager.createQuery(hql).setParameter(1, userId).setParameter(2, storeId).getResultList()
 				.size();
-		return count > 0 ? false : true;
+		return count > 0 ? true : false;
 	}
 
 	@Override

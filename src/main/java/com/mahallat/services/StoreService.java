@@ -49,12 +49,9 @@ public class StoreService implements IStoreService {
 	}
 
 	@Override
-	public synchronized boolean rate(StoreRating storeRating) {
-		if (storeDAO.ratingExist(storeRating.getUser().getId(), storeRating.getStore().getId())) {
-			return false;
-		}
+	public void rate(StoreRating storeRating) {
+		storeRating.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 		storeDAO.rate(storeRating);
-		return true;
 	}
 
 	@Override
@@ -62,4 +59,9 @@ public class StoreService implements IStoreService {
 		return storeDAO.storeByUserId(id);
 	}
 
+	@Override
+	public boolean ratingExist(int userId , int storeId) {
+		return storeDAO.ratingExist(userId, storeId);
+	}
+	
 }

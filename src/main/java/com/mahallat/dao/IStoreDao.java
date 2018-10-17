@@ -14,7 +14,7 @@ public interface IStoreDao{
 	void update (Store store);
 	List<Product> getAllProductsByStoreId(int id);
 	void rate(StoreRating storeRating);
-	boolean ratingExist(int user_id, int store_id);
+	boolean ratingExist(int userId, int storeId);
 	boolean userHasStore(int id);
 	
 }

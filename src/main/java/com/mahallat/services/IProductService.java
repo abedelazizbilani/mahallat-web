@@ -11,5 +11,6 @@ public interface IProductService {
 	void save(Product product);
 	void update(Product product);
 	Integer getProductLikesCount(Integer id);
-	int ratingExist(int userId , int productId);
+	boolean ratingExist(int userId , int productId);
+	void rate(ProductRating productRating);
 }

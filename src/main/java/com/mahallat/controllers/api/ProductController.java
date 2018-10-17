@@ -21,15 +21,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mahallat.entity.Product;
+import com.mahallat.entity.ProductRating;
 import com.mahallat.entity.User;
-import com.mahallat.models.ProductRating;
-import com.mahallat.models.Register;
+import com.mahallat.models.Rating;
 import com.mahallat.services.IProductService;
 import com.mahallat.services.IUserService;
 
@@ -37,8 +36,10 @@ import com.mahallat.services.IUserService;
 @RequestMapping(value = "api")
 @CrossOrigin
 public class ProductController {
+	
 	@Autowired
 	private IProductService productService;
+	@Autowired
 	private IUserService userService;
 
 	@GetMapping("product/{id}")
@@ -50,13 +51,12 @@ public class ProductController {
 			response.put("status", "Data not found");
 			return new ResponseEntity<HashMap>(response, HttpStatus.NOT_FOUND);
 		}
-		int ratingTotal = product.getProductRatings().size();
 		IntSummaryStatistics stats = product.getProductRatings().stream().mapToInt((x) -> x.getRate())
 				.summaryStatistics();
-		System.out.println(stats);
 
 		response.put("status", "success");
 		response.put("data", product);
+		response.put("rating", stats.getAverage());
 
 		return new ResponseEntity<HashMap>(response, HttpStatus.OK);
 	}
@@ -73,12 +73,27 @@ public class ProductController {
 
 	@PostMapping("product/rate/{id}")
 	@Transactional
-	public ResponseEntity<Boolean> rate(@RequestBody @Valid ProductRating rating,
+	public ResponseEntity<HashMap> rate(@RequestBody @Valid Rating rating,
 			@PathVariable("id") Integer productId) {
 		User user = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+		HashMap<String, String> response = new HashMap<String,String>();
+		boolean previousRating = productService.ratingExist(user.getId(), productId);
 
-		int previousRating = productService.ratingExist(user.getId(), productId);
-		return new ResponseEntity<Boolean>(true, HttpStatus.CREATED);
+
+		System.out.println(previousRating);
+		
+		if (!previousRating) {
+			Product product = productService.one(productId);
+			ProductRating prodcutRating = new ProductRating();
+			prodcutRating.setRate(rating.getRating());
+			prodcutRating.setUser(user);
+			prodcutRating.setProduct(product);
+			productService.rate(prodcutRating);
+			response.put("success", "product rated");
+			return new ResponseEntity<HashMap>(response, HttpStatus.CREATED);
+		}
+		response.put("error", "product already rated");
+		return new ResponseEntity<HashMap>(response, HttpStatus.CREATED);
 	}
 
 	@ResponseStatus(HttpStatus.BAD_REQUEST)

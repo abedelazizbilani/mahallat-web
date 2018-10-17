@@ -1,5 +1,6 @@
 package com.mahallat.services;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,14 +21,16 @@ public class ProductService implements IProductService {
 	}
 
 	@Override
-	public int ratingExist(int userId , int productId) {
-		if (productDao.ratingExist(userId, productId)) {
-			return false;
-		}
-		productDao.rate();
-		return true;
+	public boolean ratingExist(int userId , int productId) {
+		return productDao.ratingExist(userId, productId);
 	}
 
+	@Override
+	public void rate(ProductRating productRating) {
+		productRating.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+		productDao.rate(productRating);
+	}
+	
 	@Override
 	public List<Product> storeProducts(int id) {
 		return productDao.all(id);
