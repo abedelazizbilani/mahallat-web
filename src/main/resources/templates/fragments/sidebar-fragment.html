@@ -4,31 +4,31 @@
 <div th:fragment="sidebar" id="sidebar">
 	<div class="sidebar" data-color="purple" data-background-color="white" data-image="../images/sidebar-1.jpg">
 		<div class="logo">
-			<a href="http://www.creative-tim.com" class="simple-text logo-normal"> Creative Tim </a>
+			<a href="/" class="simple-text logo-normal"> MHALLAT</a>
 		</div>
 		<div class="sidebar-wrapper">
 			<ul class="nav">
 				<li class="nav-item  "><a class="nav-link" th:href="@{~/admin/dashboard}"> <i class="material-icons">dashboard</i>
 						<p>Dashboard</p>
 				</a></li>
-				<li class="nav-item "><a class="nav-link" th:href="@{~/admin/dashboard/users}"> <i class="material-icons">person</i>
+				<li sec:authorize="hasAuthority('ADMIN')" class="nav-item "><a class="nav-link" th:href="@{~/admin/dashboard/users}"> <i class="material-icons">person</i>
 						<p>Users List</p>
 				</a></li>
 				<li sec:authorize="hasAuthority('ADMIN')" class="nav-item "><a class="nav-link" th:href="@{~/admin/dashboard/stores}"> <i class="material-icons">
 							store_mall_directory </i>
 						<p>Stores List</p>
 				</a></li>
-				<li sec:authorize="hasAuthority('ADMIN')" class="nav-item "><a class="nav-link" th:href="@{~/admin/dashboard/products}"> <i class="material-icons">
+				<li sec:authorize="hasAuthority('STORE')" class="nav-item "><a class="nav-link" th:href="@{~/admin/dashboard/store/+'${user.id}'}"> <i class="material-icons">
+							store_mall_directory </i>
+							<p sec:authentication="name">Bob</p>
+				</a></li>
+				<li sec:authorize="hasAuthority('STORE')" class="nav-item "><a class="nav-link" th:href="@{~/admin/dashboard/products}"> <i class="material-icons">
 							store_mall_directory </i>
 						<p>Products</p>
 				</a></li>
 				<li sec:authorize="hasAuthority('ADMIN')" class="nav-item "><a class="nav-link" th:href="@{~/admin/dashboard/categories}"> <i
 						class="material-icons"> category </i>
 						<p>Store Categories</p>
-				</a></li>
-				<li sec:authorize="hasAuthority('ADMIN')" class="nav-item "><a class="nav-link" th:href="@{~/admin/dashboard/stores}"> <i class="material-icons">
-							settings </i>
-						<p>System Settings</p>
 				</a></li>
 			</ul>
 		</div>

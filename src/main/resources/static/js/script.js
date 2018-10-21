@@ -150,16 +150,14 @@ myScripts = {
 		var mapOptions = {
 			zoom : 13,
 			center : myLatlng,
-			scrollwheel : false, // we disable de scroll over the map, it is
-		// a really annoing when you scroll through
-		// page
+			scrollwheel : false,
 		};
 		var marker;
 		var map = new google.maps.Map(document.getElementById("map"),
 				mapOptions);
 
-		
-		if (storeLocation !== "undefined") {
+		if ((storeLocation !== "undefined")
+				&& (!storeLocation instanceof Array)) {
 			marker = new google.maps.Marker({
 				position : {
 					lat : parseFloat(storeLocation.lng),
@@ -167,20 +165,47 @@ myScripts = {
 				},
 				map : map
 			});
+
+			map.addListener('click', function(e) {
+				latLng = e.latLng;
+				// if marker exists and has a .setMap method, hide it
+				if (marker && marker.setMap) {
+					marker.setMap(null);
+				}
+				marker = new google.maps.Marker({
+					position : latLng,
+					map : map
+				});
+				setXAndY(e.latLng.lat(), e.latLng.lng())
+			});
+
 		}
 
-		map.addListener('click', function(e) {
-			latLng = e.latLng;
-			// if marker exists and has a .setMap method, hide it
-			if (marker && marker.setMap) {
-				marker.setMap(null);
-			}
-			marker = new google.maps.Marker({
-				position : latLng,
-				map : map
-			});
-			setXAndY(e.latLng.lat(), e.latLng.lng())
-		});
+		if (storeLocation instanceof Array) {
+			var i = 0;
+			$(storeLocation).each(function(i, location) {
+				console.log(storeLocation)
+				// create a new marker
+				var marker = new google.maps.Marker({
+					position : {
+						lat : parseFloat(location.lng),
+						lng : parseFloat(location.lat),
+						title : location.storeName
+					},
+					map : map
+				});
+				// assign an info window for each marker
+				marker.info = new google.maps.InfoWindow({
+					content : "<a href='admin/dashboard/store/"+location.id+"'>"+location.storeName + "</a>"
+				});
+				// add event listener for each marker	
+				marker.addListener("click", function(evt) {
+					marker.info.open(map, marker);
+				});
+
+				i++
+			})
+		}
 	},
 	showNotification : function(from, align) {
 		type = [ '', 'info', 'danger', 'success', 'warning', 'rose', 'primary' ];

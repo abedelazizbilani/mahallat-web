@@ -11,6 +11,7 @@ import com.mahallat.entity.Category;
 import com.mahallat.entity.Product;
 import com.mahallat.entity.ProductRating;
 import com.mahallat.entity.Store;
+import com.mahallat.entity.StoreLike;
 import com.mahallat.entity.StoreRating;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -77,16 +78,24 @@ public class StoreDao implements IStoreDao {
 	}
 
 	@Override
-	public boolean ratingExist(int userId, int storeId) {
+	public List<StoreRating> ratingExist(int userId, int storeId) {
 		String hql = "From StoreRating as storeRating where storeRating.user.id = ? and storeRating.store.id = ?";
-		int count = entityManager.createQuery(hql).setParameter(1, userId).setParameter(2, storeId).getResultList()
-				.size();
-		return count > 0 ? true : false;
+		@SuppressWarnings("unchecked")
+		List<StoreRating> ratings = entityManager.createQuery(hql).setParameter(1, userId).setParameter(2, storeId)
+				.getResultList();
+		return ratings;
 	}
 
 	@Override
 	public Store storeByUserId(int id) {
 		String hql = "FROM Store as store where store.user.id = ? ";
 		return (Store) entityManager.createQuery(hql).setParameter(1, id).getSingleResult();
+	}
+
+	@Override
+
+	public List<StoreLike> getStoreLikes(int storeId) {
+		String hql = "select store.storeLikes From Store as store where store.id= ?";
+		return entityManager.createQuery(hql).setParameter(1, storeId).getResultList();
 	}
 }

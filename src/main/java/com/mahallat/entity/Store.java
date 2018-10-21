@@ -61,15 +61,24 @@ public class Store implements java.io.Serializable {
     @CreatedDate
     private Date createdAt;
 
+	public int likeCount;
+	public double averageRating;
+	public boolean liked;
+	public boolean rated;
+	public int rate;    
+    
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @LastModifiedDate
     private Date updatedAt;
     @JsonIgnore
 	private Category category;
-	private Set<StoreRating> storeRatings = new HashSet<StoreRating>(0);
-	private Set<StoreLike> storeLikes = new HashSet<StoreLike>(0);
-	private Set<Product> products = new HashSet<Product>(0);
+    @JsonIgnore
+    private Set<StoreRating> storeRatings = new HashSet<StoreRating>(0);
+    @JsonIgnore
+    private Set<StoreLike> storeLikes = new HashSet<StoreLike>(0);
+    @JsonIgnore
+    private Set<Product> products = new HashSet<Product>(0);
 
 	public Store() {
 	}
@@ -237,6 +246,7 @@ public class Store implements java.io.Serializable {
 	}
 
 	@JsonManagedReference
+	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "store")
 	public Set<StoreRating> getStoreRatings() {
 		return this.storeRatings;
@@ -247,6 +257,7 @@ public class Store implements java.io.Serializable {
 	}
 
 	@JsonBackReference
+	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "store")
 	public Set<StoreLike> getStoreLikes() {
 		return this.storeLikes;
@@ -257,6 +268,7 @@ public class Store implements java.io.Serializable {
 	}
 
 	@JsonBackReference
+	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "store")
 	public Set<Product> getProducts() {
 		return this.products;

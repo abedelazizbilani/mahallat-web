@@ -50,20 +50,6 @@
 												</div>
 											</div>
 										</div>
-										<div class="row">
-											<div class="col-md-4">
-												<div class="file-field">
-													<div class="btn custom-file btn-primary pull-left">
-														<i class="material-icons"> cloud_upload </i> <input class="custom-file-input" type="file"></input>
-													</div>
-												</div>
-											</div>
-											<div class="col-md-8">
-												<div class="file-path-wrapper">
-													<label class="bmd-label-floating">File Path</label> <input th:value="${user.image}" type="text" placeholder="Upload your file" class="form-control">
-												</div>
-											</div>
-										</div>
 										<input th:value="${user.id}" th:field="*{user.id}" type="hidden" class="hidden">
 										<button type="submit" class="btn btn-primary pull-right">Update Profile</button>
 										<div class="clearfix"></div>
@@ -74,12 +60,22 @@
 						<div class="col-md-4">
 							<div class="card card-profile">
 								<div class="card-avatar">
-									<a href="#pablo"> <img class="img" th:src="@{${'/users/images/' + user.image}}" />
-									</a>
+									<div class="fileinput fileinput-new text-center" data-provides="fileinput">
+										<div class="fileinput-new thumbnail img-raised">
+											<img src="https://epicattorneymarketing.com/wp-content/uploads/2016/07/Headshot-Placeholder-1.png" alt="...">
+										</div>
+									</div>
 								</div>
 								<div class="card-body">
 									<h6 class="card-category text-gray">ROLE</h6>
 									<h4 th:text="${user.name + ' ' + user.lastname}" class="card-title">Alec Thompson</h4>
+								</div>
+								<div class="fileinput-preview fileinput-exists thumbnail img-raised"></div>
+								<div>
+									<span class="btn btn-raised btn-round btn-default btn-file"> <span class="fileinput-new">Select image</span> <span class="fileinput-exists">Change</span>
+										<input type="file" name="file" />
+									</span> <a href="#pablo" class="btn btn-danger btn-round fileinput-exists" data-dismiss="fileinput"> <i class="fa fa-times"></i> Remove
+									</a>
 								</div>
 							</div>
 						</div>

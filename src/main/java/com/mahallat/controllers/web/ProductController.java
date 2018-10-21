@@ -59,7 +59,6 @@ public class ProductController {
 	public ModelAndView add() {
 
 		User user = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
-		// check if user has a store
 
 		// user don't have a store and he can add one
 		ModelAndView modelAndView = new ModelAndView();

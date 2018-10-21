@@ -4,6 +4,7 @@ import java.util.List;
 import com.mahallat.base.BaseDao;
 import com.mahallat.entity.Product;
 import com.mahallat.entity.Store;
+import com.mahallat.entity.StoreLike;
 import com.mahallat.entity.StoreRating;;
 
 public interface IStoreDao{
@@ -14,7 +15,7 @@ public interface IStoreDao{
 	void update (Store store);
 	List<Product> getAllProductsByStoreId(int id);
 	void rate(StoreRating storeRating);
-	boolean ratingExist(int userId, int storeId);
+	List<StoreRating> ratingExist(int userId, int storeId);
 	boolean userHasStore(int id);
-	
+	List<StoreLike> getStoreLikes(int storeId);
 }

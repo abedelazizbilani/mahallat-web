@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mahallat.entity.Category;
-import com.mahallat.entity.Product;
-import com.mahallat.entity.Store;
 import com.mahallat.services.ICategoryService;
 
 @RestController("api-controller")

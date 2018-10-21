@@ -163,4 +163,16 @@ public class StoreController {
 		return modelAndView;
 	}
 
+	@GetMapping(value = "admin/dashboard/store/{id}")
+	public ModelAndView view(@PathVariable("id") int id) {
+		ModelAndView modelAndView = new ModelAndView();
+		Store store = storeService.one(id);
+		if (store == null) {
+			return new ModelAndView("redirect:/admin/dashboard/stores");
+		}
+		modelAndView.addObject("store", store);
+		modelAndView.setViewName("admin/store/view");
+		return modelAndView;
+	}
+	
 }

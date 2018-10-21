@@ -1,6 +1,7 @@
 package com.mahallat.controllers.api;
 
 import java.util.HashMap;
+import java.util.IntSummaryStatistics;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -23,6 +24,7 @@ import com.mahallat.entity.Store;
 import com.mahallat.entity.StoreRating;
 import com.mahallat.entity.User;
 import com.mahallat.models.Rating;
+import com.mahallat.services.IProductService;
 import com.mahallat.services.IStoreService;
 import com.mahallat.services.IUserService;
 
@@ -33,12 +35,39 @@ public class StoreController {
 	@Autowired
 	private IStoreService storeService;
 	@Autowired
+	private IProductService productService;
+	@Autowired
 	private IUserService userService;
-	
+
 	@GetMapping("store/{id}")
-	public ResponseEntity<Store> one(@PathVariable("id") Integer id) {
+	public ResponseEntity<HashMap> one(@PathVariable("id") Integer id) {
 		Store store = storeService.one(id);
-		return new ResponseEntity<Store>(store, HttpStatus.OK);
+		HashMap<String, Object> response = new HashMap<String, Object>();
+		if (store == null) {
+			response.put("status", "Data not found");
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		}
+		// check if user logged in
+		User user = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+		// get product like count
+		store.likeCount = storeService.storeLikes(id).size();
+		store.rated = false;
+		IntSummaryStatistics stats = store.getStoreRatings().stream().mapToInt((x) -> x.getRate()).summaryStatistics();
+		// if user is logged in set rated true or false , liked or not
+		if (user != null) {
+			List<StoreRating> ratings = storeService.ratingExist(user.getId(), id);
+			store.rate = ratings.isEmpty() ? 0 : ratings.get(0).getRate();
+			store.rated = ratings.size() > 0 ? true : false;
+			store.liked = storeService.storeLikes(id).size() > 0 ? true : false;
+		}
+		store.likeCount = store.getStoreLikes().size();
+		store.averageRating = stats.getAverage();
+		// set success
+		response.put("status", "success");
+		// set data
+		response.put("data", store);
+
+		return new ResponseEntity<HashMap>(response, HttpStatus.OK);
 	}
 
 	@GetMapping("stores")
@@ -48,17 +77,40 @@ public class StoreController {
 	}
 
 	@GetMapping("store/{id}/products")
-	public ResponseEntity<List<Product>> getProductsByStoreId(@PathVariable("id") int id) {
-		List<Product> list = storeService.getAllProductsByStoreId(id);
-		return new ResponseEntity<List<Product>>(list, HttpStatus.OK);
+	public ResponseEntity<HashMap> getProductsByStoreId(@PathVariable("id") int id) {
+		Store store = storeService.one(id);
+		HashMap<String, Object> response = new HashMap<String, Object>();
+		if (store == null) {
+			response.put("status", "Store does not exist");
+			return new ResponseEntity<HashMap>(response, HttpStatus.OK);
+		}
+
+		List<Product> products = storeService.getAllProductsByStoreId(id);
+		// check if user logged in
+		User user = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+		products.forEach(product -> {
+			IntSummaryStatistics stats = product.getProductRatings().stream().mapToInt((x) -> x.getRate())
+					.summaryStatistics();
+			
+			if (user != null) {
+				List<ProductRating> productRatings = productService.ratingExist(user.getId(), product.getId());
+				product.rated = productRatings.size() > 0 ? true : false;
+				product.rate = productRatings.isEmpty() ? 0 : productRatings.get(0).getRate();
+				product.liked = productService.getProductLikesCount(product.getId()) > 0 ? true : false;
+			}
+			product.likeCount = product.getProductLikes().size();
+			product.averageRating = stats.getAverage();
+		});
+		response.put("status", "success");
+		response.put("data", products);
+		return new ResponseEntity<HashMap>(response, HttpStatus.OK);
 	}
 
 	@PostMapping("store/rate/{id}")
-	public ResponseEntity<HashMap> rate(@RequestBody @Valid Rating rating
-			,@PathVariable("id") Integer storeId) {
+	public ResponseEntity<HashMap> rateStore(@RequestBody @Valid Rating rating, @PathVariable("id") Integer storeId) {
 		User user = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
-		HashMap<String, String> response = new HashMap<String,String>();
-		boolean previousRating = storeService.ratingExist(user.getId(), storeId);
+		HashMap<String, String> response = new HashMap<String, String>();
+		boolean previousRating = storeService.ratingExist(user.getId(), storeId).size() > 0 ? true : false;
 
 		if (!previousRating) {
 			Store store = storeService.one(storeId);
@@ -74,5 +126,5 @@ public class StoreController {
 		response.put("error", "product already rated");
 		return new ResponseEntity<HashMap>(response, HttpStatus.CREATED);
 	}
-	
+
 }

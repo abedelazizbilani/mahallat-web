@@ -2,6 +2,7 @@ package com.mahallat.services;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,7 @@ public class ProductService implements IProductService {
 	}
 
 	@Override
-	public boolean ratingExist(int userId , int productId) {
+	public List<ProductRating>  ratingExist(int userId , int productId) {
 		return productDao.ratingExist(userId, productId);
 	}
 

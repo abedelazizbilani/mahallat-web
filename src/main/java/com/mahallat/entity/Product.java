@@ -47,6 +47,11 @@ public class Product implements java.io.Serializable {
 	private Set<Comment> comments = new HashSet<Comment>(0);
 	private Set<ProductRating> productRatings = new HashSet<ProductRating>(0);
 	private Set<ProductLike> productLikes = new HashSet<ProductLike>(0);
+	public int likeCount;
+	public double averageRating;
+	public boolean liked;
+	public boolean rated;
+	public int rate;
 
 	public Product() {
 	}

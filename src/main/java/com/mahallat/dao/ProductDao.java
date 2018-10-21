@@ -1,6 +1,7 @@
 package com.mahallat.dao;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -24,12 +25,11 @@ public class ProductDao implements IProductDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public boolean ratingExist(int userId, int productId) {
-		List<ProductRating> rating = new ArrayList<ProductRating>();
+	public List<ProductRating> ratingExist(int userId, int productId) {
 		String hql = "From ProductRating as productRating where productRating.user.id= ? and productRating.product.id = ?";
-		int count = entityManager.createQuery(hql).setParameter(1, userId).setParameter(2, productId).getResultList()
-				.size();
-		return count > 0 ? true : false;
+		return (List<ProductRating>) entityManager.createQuery(hql).setParameter(1, userId).setParameter(2, productId)
+				.getResultList();
+
 	}
 
 	@Override

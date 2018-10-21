@@ -6,6 +6,7 @@ import com.mahallat.dao.IStoreDao;
 import com.mahallat.entity.Category;
 import com.mahallat.entity.Product;
 import com.mahallat.entity.Store;
+import com.mahallat.entity.StoreLike;
 import com.mahallat.entity.StoreRating;
 
 import java.sql.Timestamp;
@@ -60,8 +61,13 @@ public class StoreService implements IStoreService {
 	}
 
 	@Override
-	public boolean ratingExist(int userId , int storeId) {
+	public List<StoreRating> ratingExist(int userId , int storeId) {
 		return storeDAO.ratingExist(userId, storeId);
+	}
+	
+	@Override 
+	public List<StoreLike> storeLikes(int storeId){
+		return storeDAO.getStoreLikes(storeId);
 	}
 	
 }

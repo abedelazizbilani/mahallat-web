@@ -44,6 +44,7 @@ public class ProductLike implements java.io.Serializable {
 	public void setId(Integer id) {
 		this.id = id;
 	}
+	
 	@JsonManagedReference
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "product_id", nullable = false)
