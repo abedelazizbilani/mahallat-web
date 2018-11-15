@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,9 +23,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.mahallat.entity.Category;
+import com.mahallat.entity.Product;
 import com.mahallat.entity.Store;
 import com.mahallat.entity.User;
 import com.mahallat.services.CategoryService;
+import com.mahallat.services.ProductService;
 import com.mahallat.services.StoreService;
 import com.mahallat.services.UserService;
 
@@ -37,6 +40,8 @@ public class StoreController {
 	CategoryService categoryService;
 	@Autowired
 	UserService userService;
+	@Autowired
+	ProductService productService;
 
 	@Value("${spring.file.uploads.path.products}")
 	private String storeImagesPath;
@@ -83,8 +88,8 @@ public class StoreController {
 			modelAndView.setViewName("admin/store/add");
 		} else {
 			try {
-				
-				if(!file.isEmpty()) {
+
+				if (!file.isEmpty()) {
 					// Get the file and save it somewhere
 					String imagePath = storeImagesPath + file.getOriginalFilename();
 					String type = file.getContentType().split("/")[1];
@@ -93,11 +98,9 @@ public class StoreController {
 					Path path = Paths.get(imagePath);
 					Files.write(path.resolveSibling(newImageName), bytes);
 					store.setImage("uploads/stores/" + newImageName);
-		
+
 				}
-			
-				
-				
+
 				store.setActive(store.getActive());
 				store.setCategory(categoryService.one((categoryId)));
 				store.setUser(userService.findById(userId));
@@ -163,6 +166,12 @@ public class StoreController {
 		return modelAndView;
 	}
 
+	/**
+	 * view store
+	 * 
+	 * @param id
+	 * @return
+	 */
 	@GetMapping(value = "admin/dashboard/store/{id}")
 	public ModelAndView view(@PathVariable("id") int id) {
 		ModelAndView modelAndView = new ModelAndView();
@@ -170,9 +179,15 @@ public class StoreController {
 		if (store == null) {
 			return new ModelAndView("redirect:/admin/dashboard/stores");
 		}
+		IntSummaryStatistics stats = store.getStoreRatings().stream().mapToInt((x) -> x.getRate()).summaryStatistics();
+		store.likeCount = store.getStoreLikes().size();
+		store.averageRating = stats.getAverage();
+		
+		List<Product> productList = productService.storeProducts(id);
+		modelAndView.addObject("products", productList);
 		modelAndView.addObject("store", store);
 		modelAndView.setViewName("admin/store/view");
 		return modelAndView;
 	}
-	
+
 }

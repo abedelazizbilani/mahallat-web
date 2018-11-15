@@ -40,6 +40,7 @@
 													<td th:text="${user.active} ? ${'Active'} : ${'Inactive'}"></td>
 													<td>
 													<a th:href="@{'/admin/dashboard/user/edit/' + ${user.id}}"><i class="material-icons"> edit </i> </a>
+													<a th:href="@{'/admin/dashboard/user/activate/' + ${user.id}}"><i class="material-icons" th:text="${user.active} ? ${'visibility'} : ${'visibility_off'}"></i> </a>
 													<a th:href="@{'/admin/dashboard/user/delete/' + ${user.id}}"><i class="material-icons"> delete </i></a></td>
 												</tr>
 											</tbody>

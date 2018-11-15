@@ -196,7 +196,7 @@ myScripts = {
 				});
 				// assign an info window for each marker
 				marker.info = new google.maps.InfoWindow({
-					content : "<a href='admin/dashboard/store/"+location.id+"'>"+location.storeName + "</a>"
+					content : "<a href='dashboard/store/"+location.id+"'>"+location.storeName + "</a>"
 				});
 				// add event listener for each marker	
 				marker.addListener("click", function(evt) {

@@ -46,7 +46,7 @@ public class User implements java.io.Serializable {
 	@NotEmpty(message = "Please provide an email")
 	@Email
 	private String email;
-	private Integer active;
+	private Boolean active;
 	@NotEmpty(message = "*Please provide your name.")
 	private String name;
 	@NotEmpty(message = "*Please provide your lastname.")
@@ -87,7 +87,7 @@ public class User implements java.io.Serializable {
 		this.email = email;
 	}
 
-	public User(Role role, String username, String email, Integer active, String name, String lastname,
+	public User(Role role, String username, String email, Boolean active, String name, String lastname,
 			Timestamp createdAt, Timestamp updatedAt, Set<ProductRating> productRatings, Set<StoreLike> storeLikes,
 			Set<StoreRating> storeRatings, Set<Comment> comments, Set<ProductLike> productLikes, Store store) {
 
@@ -150,11 +150,11 @@ public class User implements java.io.Serializable {
 	}
 
 	@Column(name = "active")
-	public Integer getActive() {
+	public Boolean getActive() {
 		return this.active;
 	}
 
-	public void setActive(Integer active) {
+	public void setActive(Boolean active) {
 		this.active = active;
 	}
 

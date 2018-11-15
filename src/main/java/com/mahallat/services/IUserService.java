@@ -21,6 +21,8 @@ public interface IUserService {
 	public void deleteUser(User user);
 	
 	public void save(User user);
+
+	public void activate(User user);
 	
 	public Optional<User> findUserByResetToken(String resetToken);	
 }

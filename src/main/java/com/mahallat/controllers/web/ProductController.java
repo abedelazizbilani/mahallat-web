@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Timestamp;
+import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.UUID;
 
@@ -160,4 +161,28 @@ public class ProductController {
 		}
 		return modelAndView;
 	}
+	
+	/**
+	 * view store
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@GetMapping(value = "admin/dashboard/product/{id}")
+	public ModelAndView view(@PathVariable("id") int id) {
+		ModelAndView modelAndView = new ModelAndView();
+		Product product = productService.one(id);
+		if (product == null) {
+			return new ModelAndView("redirect:/admin/dashboard/products");
+		}
+		IntSummaryStatistics stats = product.getProductRatings().stream().mapToInt((x) -> x.getRate()).summaryStatistics();
+		product.likeCount = product.getProductLikes().size();
+		product.averageRating = stats.getAverage();
+		modelAndView.addObject("product", product);
+		modelAndView.setViewName("admin/product/view");
+		return modelAndView;
+	}
+
+	
+	
 }

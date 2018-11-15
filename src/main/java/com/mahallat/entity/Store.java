@@ -60,7 +60,9 @@ public class Store implements java.io.Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @CreatedDate
     private Date createdAt;
-
+    
+    private Set<Comment> comments = new HashSet<Comment>(0);
+    
 	public int likeCount;
 	public double averageRating;
 	public boolean liked;
@@ -84,7 +86,7 @@ public class Store implements java.io.Serializable {
 	}
 
 	public Store(Category category, User user, String name, Boolean active, double longitude, double latitude,
-			Date openHour, Date closeHour, String image) {
+			Date openHour, Date closeHour, String image,Set<Comment> comments) {
 		this.category = category;
 		this.user = user;
 		this.name = name;
@@ -94,11 +96,12 @@ public class Store implements java.io.Serializable {
 		this.openHour = openHour;
 		this.closeHour = closeHour;
 		this.image = image;
+		this.comments = comments;
 	}
 
 	public Store(Category category, User user, String name, Boolean active, String description, double longitude,
 			double latitude, Date openHour, Date closeHour, String image, Date createdAt, Date updatedAt,
-			Set<StoreRating> storeRatings, Set<StoreLike> storeLikes, Set<Product> products) {
+			Set<StoreRating> storeRatings, Set<StoreLike> storeLikes, Set<Product> products , Set <Comment> comments) {
 		this.category = category;
 		this.user = user;
 		this.name = name;
@@ -114,11 +117,11 @@ public class Store implements java.io.Serializable {
 		this.storeRatings = storeRatings;
 		this.storeLikes = storeLikes;
 		this.products = products;
+		this.comments= comments;
 	}
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
-
 	@Column(name = "id", unique = true, nullable = false)
 	public Integer getId() {
 		return this.id;
@@ -276,6 +279,16 @@ public class Store implements java.io.Serializable {
 
 	public void setProducts(Set<Product> products) {
 		this.products = products;
+	}
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "store")
+	@JsonManagedReference
+	public Set<Comment> getComments() {
+		return this.comments;
+	}
+	
+	public void setComments(Set<Comment> comments) {
+		this.comments = comments;
 	}
 
 }

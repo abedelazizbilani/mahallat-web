@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layouts/adminpannellayout.html}" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:include="layouts/admin-pannel-layout :: htmlhead" th:with="title=${product.name}"></head>
+<body>
+	<div class="wrapper">
+		<div th:include="layouts/admin-pannel-layout :: sidebar"></div>
+		<div class="main-panel ps-container ps-theme-default ps-active-y" layout:fragment="main-pannel">
+			<nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
+				<div class="container-fluid">
+					<div class="navbar-wrapper">
+						<a class="navbar-brand" href="#pablo">Product</a>
+					</div>
+				</div>
+			</nav>
+			<div class="content">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="card">
+								<div class="card-header card-header-primary">
+									<h4 class="card-title" th:text="${product.name}"></h4>
+								</div>
+								<div class="card-body">
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<div class="fileinput fileinput-new text-center" data-provides="fileinput">
+													<div class="fileinput-new thumbnail img-raised">
+														<img th:src="'/'+*{product.image}" alt="...">
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-12">
+											<div class="tim-typo">
+												<label> Description</label>
+												<p>
+													<span class="tim-note" th:text="${product.description}">Description</span>
+												</p>
+											</div>
+										</div>
+									</div>
+									<hr />
+									<div class="row">
+									<div class="col-md-4">
+									<label>Price</label>
+									<p>
+									<span class="tim-typo" th:text="${product.price}"></span>
+									</p>
+									</div>
+										<div class="col-md-4">
+											<label> Likes </label>
+											<p>
+												<span class="tim-typo" th:text="${product.likeCount}"> </span>
+											</p>
+										</div>
+										<div class="col-md-4">
+											<label> Average Rating</label>
+											<p>
+												<span class="tim-typo" th:text="${product.averageRating}"> </span>
+											</p>
+										</div>
+									</div>
+									<hr />
+									<a th:href="@{'/admin/dashboard/product/edit/' + ${product.id}}"><i class="btn btn-primary ">edit </i> </a>
+									<hr />
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div th:include="layouts/admin-pannel-layout :: footer"></div>
+			<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgjgFbydB4u_EwrMiU05xck84lU96dXng"></script>
+		</div>
+</body>
+</html>

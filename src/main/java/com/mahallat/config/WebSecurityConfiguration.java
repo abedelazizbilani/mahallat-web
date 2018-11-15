@@ -59,6 +59,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter{
 				.antMatchers("/login").permitAll()
 				.antMatchers("/registration").permitAll()
 				.antMatchers("/api/product/rate").hasAuthority("MOBILE").anyRequest().authenticated()
+				.antMatchers("/api/comment/add").hasAuthority("MOBILE").anyRequest().authenticated()
 				.antMatchers("/admin/**").hasAuthority("ADMIN").anyRequest()
 				.authenticated().and().csrf().disable().formLogin()
 				.loginPage("/login").failureUrl("/login?error=true")

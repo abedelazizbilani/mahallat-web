@@ -66,7 +66,7 @@ public class UserService implements UserDetailsService, IUserService {
 	@Override
 	public boolean saveUser(User user, String role) {
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-		user.setActive(0);
+		user.setActive(false);
 		user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 		Role userRole = roleDao.findByName(role);
 		user.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
@@ -94,6 +94,8 @@ public class UserService implements UserDetailsService, IUserService {
 		userDAO.delete(user);
 	}
 
+	
+	
 	@Override
 	public Optional<User> findUserByResetToken(String resetToken) {
 		return userDAO.findByResetToken(resetToken);
@@ -102,5 +104,10 @@ public class UserService implements UserDetailsService, IUserService {
 	@Override
 	public void save(User user) {
 		userDAO.save(user);
+	}
+	
+	@Override
+	public void activate(User user) {
+		userDAO.activate(user.getActive(), user.getId());
 	}
 }

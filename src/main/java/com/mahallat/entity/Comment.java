@@ -27,13 +27,12 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 public class Comment implements java.io.Serializable {
 
 	private int id;
-	private Comment comment;
+	private Store store;
 	private Product product;
 	private User user;
 	private String text;
 	private Date createdAt;
 	private Date updatedAt;
-	private Set<Comment> comments = new HashSet<Comment>(0);
 
 	public Comment() {
 	}
@@ -45,20 +44,17 @@ public class Comment implements java.io.Serializable {
 		this.createdAt = createdAt;
 	}
 
-	public Comment(int id, Comment comment, Product product, User user, String text, Date createdAt, Date updatedAt,
-			Set<Comment> comments) {
+	public Comment(int id, Store store, Product product, User user, String text, Date createdAt, Date updatedAt) {
 		this.id = id;
-		this.comment = comment;
+		this.store= store;
 		this.product = product;
 		this.user = user;
 		this.text = text;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
-		this.comments = comments;
 	}
 
 	@Id
-
 	@Column(name = "id", unique = true, nullable = false)
 	public int getId() {
 		return this.id;
@@ -69,18 +65,18 @@ public class Comment implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JsonManagedReference
+	@JsonBackReference
 	@JoinColumn(name = "store_id")
-	public Comment getComment() {
-		return this.comment;
+	public Store getStore() {
+		return this.store;
 	}
 
-	public void setComment(Comment comment) {
-		this.comment = comment;
+	public void setStore(Store store) {
+		this.store= store;
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JsonManagedReference
+	@JsonBackReference
 	@JoinColumn(name = "product_id")
 	public Product getProduct() {
 		return this.product;
@@ -129,15 +125,4 @@ public class Comment implements java.io.Serializable {
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
 	}
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "comment")
-	@JsonBackReference
-	public Set<Comment> getComments() {
-		return this.comments;
-	}
-
-	public void setComments(Set<Comment> comments) {
-		this.comments = comments;
-	}
-
 }

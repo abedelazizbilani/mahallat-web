@@ -183,7 +183,7 @@ public class Product implements java.io.Serializable {
 	}
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
-	@JsonBackReference
+	@JsonManagedReference
 	public Set<Comment> getComments() {
 		return this.comments;
 	}

@@ -2,7 +2,6 @@ package com.mahallat.services;
 
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
