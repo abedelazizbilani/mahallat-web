@@ -66,7 +66,7 @@ public class UserService implements UserDetailsService, IUserService {
 	@Override
 	public boolean saveUser(User user, String role) {
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-		user.setActive(false);
+		user.setActive(true);
 		user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 		Role userRole = roleDao.findByName(role);
 		user.setRoles(new HashSet<Role>(Arrays.asList(userRole)));

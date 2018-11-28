@@ -34,7 +34,10 @@
 													<td th:text="${product.id}"></td>
 													<td th:text="${product.name}"></td>
 													<td th:text="${product.description}"></td>
-													<td><a th:href="@{'/admin/dashboard/product/edit/' + ${product.id}}"><i class="material-icons">edit </i> </a> <a
+													<td><a th:href="@{'/admin/dashboard/product/edit/' + ${product.id}}"><i class="material-icons">edit </i> </a>
+													
+													<a th:href="@{'/admin/dashboard/product/' + ${product.id}}"><i class="material-icons">touch_app</i> </a>
+													 <a
 														th:href="@{'/admin/dashboard/product/delete/' + ${product.id}}"><i class="material-icons">delete </i></a></td>
 												</tr>
 											</tbody>

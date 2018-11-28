@@ -37,8 +37,8 @@ public class StoreDao implements IStoreDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Product> getAllProductsByStoreId(int id) {
-		String hql = "FROM Product as product where product.active = 1";
-		return (List<Product>) entityManager.createQuery(hql).getResultList();
+		String hql = "FROM Product as product where product.active = 1 and product.store.id= ? ";
+		return (List<Product>) entityManager.createQuery(hql).setParameter(1, id).getResultList();
 	}
 
 	@Override

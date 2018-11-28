@@ -91,7 +91,7 @@ public class StoreController {
 		products.forEach(product -> {
 			IntSummaryStatistics stats = product.getProductRatings().stream().mapToInt((x) -> x.getRate())
 					.summaryStatistics();
-			
+
 			if (user != null) {
 				List<ProductRating> productRatings = productService.ratingExist(user.getId(), product.getId());
 				product.rated = productRatings.size() > 0 ? true : false;

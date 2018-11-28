@@ -156,8 +156,8 @@ myScripts = {
 		var map = new google.maps.Map(document.getElementById("map"),
 				mapOptions);
 
-		if ((storeLocation !== "undefined")
-				&& (!storeLocation instanceof Array)) {
+		if ((storeLocation !== undefined)
+				&& ((storeLocation instanceof Array) === false)) {
 			marker = new google.maps.Marker({
 				position : {
 					lat : parseFloat(storeLocation.lng),
@@ -179,6 +179,21 @@ myScripts = {
 				setXAndY(e.latLng.lat(), e.latLng.lng())
 			});
 
+		}
+		
+		if (storeLocation == null ){
+			map.addListener('click', function(e) {
+				latLng = e.latLng;
+				// if marker exists and has a .setMap method, hide it
+				if (marker && marker.setMap) {
+					marker.setMap(null);
+				}
+				marker = new google.maps.Marker({
+					position : latLng,
+					map : map
+				});
+				setXAndY(e.latLng.lat(), e.latLng.lng())
+			});
 		}
 
 		if (storeLocation instanceof Array) {

@@ -18,7 +18,7 @@
 							store_mall_directory </i>
 						<p>Stores List</p>
 				</a></li>
-				<li sec:authorize="hasAuthority('STORE')" class="nav-item "><a class="nav-link" th:href="@{~/admin/dashboard/store/+'${user.id}'}"> <i class="material-icons">
+				<li sec:authorize="hasAuthority('STORE')" class="nav-item "><a class="nav-link" th:href="@{'~/admin/dashboard/store/add' }"> <i class="material-icons">
 							store_mall_directory </i>
 							<p sec:authentication="name">Bob</p>
 				</a></li>

@@ -1,6 +1,7 @@
 package com.mahallat.controllers.web;
 
 import java.io.IOException;
+import java.lang.ProcessBuilder.Redirect;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.fasterxml.jackson.annotation.JsonCreator.Mode;
 import com.mahallat.entity.Product;
@@ -50,9 +52,15 @@ public class ProductController {
 
 		ModelAndView modelAndView = new ModelAndView();
 
+		if(user.getStore() == null) {
+			return new ModelAndView("redirect:/admin/dashboard/store/add");
+		}
+		
 		List<Product> productList = productService.storeProducts((user.getStore()).getId());
 		modelAndView.addObject("products", productList);
+		modelAndView.addObject("storeId", user.getStore().getId());
 		modelAndView.setViewName("admin/product/index");
+		
 		return modelAndView;
 	}
 

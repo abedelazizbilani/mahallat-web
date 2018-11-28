@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.UUID;
@@ -12,6 +13,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -43,7 +45,7 @@ public class StoreController {
 	@Autowired
 	ProductService productService;
 
-	@Value("${spring.file.uploads.path.products}")
+	@Value("${spring.file.uploads.path.stores}")
 	private String storeImagesPath;
 
 	@GetMapping("/admin/dashboard/stores")
@@ -77,7 +79,9 @@ public class StoreController {
 	@PostMapping(value = "/admin/dashboard/store/add")
 	public ModelAndView add(Store store, BindingResult bindingResult, @RequestParam MultipartFile file,
 			@RequestParam("user_id") Integer userId, @RequestParam("category") Integer categoryId) {
+
 		ModelAndView modelAndView = new ModelAndView("redirect:/admin/dashboard/stores");
+
 		if (bindingResult.hasErrors()) {
 			// list categories
 			List<Category> categoriesList = categoryService.getAllCategories();
@@ -110,6 +114,11 @@ public class StoreController {
 			}
 			storeService.save(store);
 		}
+		
+		if (hasRole("STORE")) {
+			return new ModelAndView("redirect:/admin/dashboard");
+		}
+		
 		return modelAndView;
 	}
 
@@ -118,7 +127,7 @@ public class StoreController {
 		ModelAndView modelAndView = new ModelAndView();
 		Store store = storeService.one(id);
 		if (store == null) {
-			return new ModelAndView("redirect:/admin/dashboard/stores");
+			return new ModelAndView("redirect:/admin/dashboard");
 		}
 		modelAndView.addObject("categories", categoryService.getAllCategories());
 		modelAndView.addObject("user",
@@ -131,7 +140,7 @@ public class StoreController {
 	@PostMapping(value = "/admin/dashboard/store/edit")
 	public ModelAndView update(@Valid Store store, BindingResult bindingResult, @RequestParam MultipartFile file,
 			@RequestParam("user_id") Integer userId, @RequestParam("category") Integer categoryId) {
-		ModelAndView modelAndView = new ModelAndView("redirect:/admin/dashboard/stores");
+		ModelAndView modelAndView = new ModelAndView("redirect:/admin/dashboard");
 
 		if (bindingResult.hasErrors()) {
 			modelAndView.addObject("categories", categoryService.getAllCategories());
@@ -182,12 +191,27 @@ public class StoreController {
 		IntSummaryStatistics stats = store.getStoreRatings().stream().mapToInt((x) -> x.getRate()).summaryStatistics();
 		store.likeCount = store.getStoreLikes().size();
 		store.averageRating = stats.getAverage();
-		
+		User user = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+
 		List<Product> productList = productService.storeProducts(id);
 		modelAndView.addObject("products", productList);
 		modelAndView.addObject("store", store);
+		modelAndView.addObject("storeId", user.getStore().getId());
 		modelAndView.setViewName("admin/store/view");
 		return modelAndView;
+	}
+
+	private boolean hasRole(String role) {
+		Collection<GrantedAuthority> authorities = (Collection<GrantedAuthority>) SecurityContextHolder.getContext()
+				.getAuthentication().getAuthorities();
+		boolean hasRole = false;
+		for (GrantedAuthority authority : authorities) {
+			hasRole = authority.getAuthority().equals(role);
+			if (hasRole) {
+				break;
+			}
+		}
+		return hasRole;
 	}
 
 }
