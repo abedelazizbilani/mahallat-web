@@ -25,9 +25,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mahallat.entity.FavoriteProduct;
 import com.mahallat.entity.Product;
+import com.mahallat.entity.ProductLike;
 import com.mahallat.entity.ProductRating;
 import com.mahallat.entity.User;
+import com.mahallat.models.Favorite;
 import com.mahallat.models.Rating;
 import com.mahallat.services.IProductService;
 import com.mahallat.services.IUserService;
@@ -53,7 +56,7 @@ public class ProductController {
 			response.put("status", "Data not found");
 			return new ResponseEntity<HashMap>(response, HttpStatus.NOT_FOUND);
 		}
-		
+
 		// check if user logged in
 		User user = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
 		boolean previousRating = false;
@@ -64,10 +67,11 @@ public class ProductController {
 		// if user is logged in set rated true or false , liked or not
 		if (user != null) {
 			List<ProductRating> ratings = productService.ratingExist(user.getId(), id);
-			product.rate = (int)ratings.get(0).getRate() ;		
-			previousRating = ratings .size() > 0 ? true : false;
+			product.rate = (int) ratings.get(0).getRate();
+			previousRating = ratings.size() > 0 ? true : false;
 			product.rated = previousRating;
-			product.liked = productService.getProductLikesCount(id)> 0 ? true : false;
+			product.liked = productService.getProductLikesCount(id) > 0 ? true : false;
+			product.favorited= productService.favoriteExist(user.getId(), product.getId()) != null ? true : false;
 		}
 		product.likeCount = product.getProductLikes().size();
 		product.averageRating = stats.getAverage();
@@ -78,16 +82,6 @@ public class ProductController {
 
 		return new ResponseEntity<HashMap>(response, HttpStatus.OK);
 	}
-//
-//	@GetMapping("product/likes/{id}")
-//	public ResponseEntity<HashMap> productLikesCount(@PathVariable("id") Integer id) {
-//		// get products like
-//		int productLikesCount = productService.getProductLikesCount(id);
-//		HashMap<String, String> response = new HashMap<String, String>();
-//		response.put("message", "success");
-//		response.put("data", Integer.toString(productLikesCount));
-//		return new ResponseEntity<HashMap>(response, HttpStatus.OK);
-//	}
 
 	@PostMapping("product/rate/{id}")
 	@Transactional
@@ -115,6 +109,89 @@ public class ProductController {
 	public List<String> handleValidationExceptions(MethodArgumentNotValidException ex) {
 		return ex.getBindingResult().getAllErrors().stream().map(ObjectError::getDefaultMessage)
 				.collect(Collectors.toList());
+	}
+
+	@PostMapping("product/add-favorite")
+	@Transactional
+	public ResponseEntity<HashMap> addToFavorite(@RequestBody @Valid Favorite favorite) {
+		User user = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+		HashMap<String, String> response = new HashMap<String, String>();
+		Product product = productService.one(favorite.getProductId());
+
+		if (user == null) {
+			response.put("error", "uesr not logged in");
+			return new ResponseEntity<HashMap>(response, HttpStatus.FAILED_DEPENDENCY);
+		}
+
+		if (product == null) {
+			response.put("error", "product does not exist");
+			return new ResponseEntity<HashMap>(response, HttpStatus.CREATED);
+		}
+
+		FavoriteProduct previousFavorite = productService.favoriteExist(user.getId(), favorite.getProductId());
+
+		// check if already exist remove it else add to favorite
+		if (previousFavorite != null) {
+			productService.removeFavorite(previousFavorite);
+			response.put("success", "product has been removed");
+			return new ResponseEntity<HashMap>(response, HttpStatus.CREATED);
+		}
+		FavoriteProduct favoriteProduct = new FavoriteProduct();
+		favoriteProduct.setProduct(product);
+
+		favoriteProduct.setUser(user);
+		productService.addFavorite(favoriteProduct);
+		response.put("success", "product added to favorite");
+		return new ResponseEntity<HashMap>(response, HttpStatus.CREATED);
+
+	}
+
+	@GetMapping("product/get-favorite")
+	@Transactional
+	public ResponseEntity<HashMap> getFavorites() {
+		User user = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+		HashMap<String, Object> response = new HashMap<String, Object>();
+		List<FavoriteProduct> favoriteProducts = productService.favorites(user.getId());
+
+		response.put("status", "success");
+		response.put("data", favoriteProducts);
+		return new ResponseEntity<HashMap>(response, HttpStatus.OK);
+
+	}
+
+	@PostMapping("product/like")
+	@Transactional
+	public ResponseEntity<HashMap> like(@RequestBody @Valid Favorite product) {
+		User user = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+		HashMap<String, String> response = new HashMap<String, String>();
+		Product productModel = productService.one(product.getProductId());
+
+		if (user == null) {
+			response.put("error", "uesr not logged in");
+			return new ResponseEntity<HashMap>(response, HttpStatus.FAILED_DEPENDENCY);
+		}
+
+		if (productModel == null) {
+			response.put("error", "product does not exist");
+			return new ResponseEntity<HashMap>(response, HttpStatus.EXPECTATION_FAILED);
+		}
+
+		ProductLike previousLike = productService.likeExist(user.getId(), product.getProductId());
+
+		// check if already exist remove it else add to favorite
+		if (previousLike != null) {
+			productService.removeLike(previousLike);
+			response.put("success", "like has been removed");
+			return new ResponseEntity<HashMap>(response, HttpStatus.CREATED);
+		}
+		ProductLike productLike = new ProductLike();
+		productLike.setProduct(productModel);
+
+		productLike.setUser(user);
+		productService.addLike(productLike);
+		response.put("success", "product liked");
+		return new ResponseEntity<HashMap>(response, HttpStatus.CREATED);
+
 	}
 
 }

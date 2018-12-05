@@ -6,10 +6,14 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import org.springframework.stereotype.Repository;
+
+import com.mahallat.entity.FavoriteProduct;
 import com.mahallat.entity.Product;
+import com.mahallat.entity.ProductLike;
 import com.mahallat.entity.ProductRating;
 
 @Transactional(rollbackOn = Exception.class)
@@ -67,4 +71,60 @@ public class ProductDao implements IProductDao {
 		return (int) entityManager.createQuery(hql).setParameter(1, id).getResultList().size();
 	}
 
+	@Override
+	public FavoriteProduct favoriteExist(int userId, int productId) {
+		String hql = "From FavoriteProduct as favoriteProduct where favoriteProduct.user.id= ? and favoriteProduct.product.id = ?";
+
+		try {
+			return (FavoriteProduct) entityManager.createQuery(hql).setParameter(1, userId).setParameter(2, productId)
+					.getSingleResult();
+		} catch (NoResultException ex) {
+			return null;
+		}
+	}
+
+	@Override
+	public List<FavoriteProduct> favorites(int userId) {
+		String hql = "From FavoriteProduct as favoriteProduct where favoriteProduct.user.id= ?";
+
+		try {
+			return (List<FavoriteProduct>) entityManager.createQuery(hql).setParameter(1, userId)
+					.getResultList();
+		} catch (NoResultException ex) {
+			return null;
+		}
+	}
+	
+	@Override
+	public void removeFavorite(FavoriteProduct favoriteProduct) {
+		entityManager.remove(favoriteProduct);
+	}
+
+	@Override
+	public void addFavorite(FavoriteProduct favoriteProduct) {
+		entityManager.persist(favoriteProduct);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public ProductLike likeExist(int userId, int productId) {
+		String hql = "From ProductLike as productLike where productLike.user.id= ? and productLike.product.id = ?";
+		try {
+		return (ProductLike) entityManager.createQuery(hql).setParameter(1, userId).setParameter(2, productId)
+				.getSingleResult();
+		}catch (Exception e) {
+			return null;
+		}
+	}
+	
+	@Override
+	public void removeLike(ProductLike product) {
+		entityManager.remove(product);
+	}
+
+	@Override
+	public void addLike(ProductLike product) {
+		entityManager.persist(product);
+	}
+	
 }

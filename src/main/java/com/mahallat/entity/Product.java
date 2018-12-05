@@ -51,6 +51,7 @@ public class Product implements java.io.Serializable {
 	public double averageRating;
 	public boolean liked;
 	public boolean rated;
+	public boolean favorited;
 	public int rate;
 
 	public Product() {

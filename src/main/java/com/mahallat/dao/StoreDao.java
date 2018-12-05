@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.mahallat.entity.Category;
 import com.mahallat.entity.Product;
+import com.mahallat.entity.ProductLike;
 import com.mahallat.entity.ProductRating;
 import com.mahallat.entity.Store;
 import com.mahallat.entity.StoreLike;
@@ -32,6 +33,13 @@ public class StoreDao implements IStoreDao {
 	public List<Store> getAllStores() {
 		String hql = "FROM Store as store";
 		return (List<Store>) entityManager.createQuery(hql).getResultList();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Store> getStoresByCategory(int id) {
+		String hql = "FROM Store as store where store.category.id = ?";
+		return (List<Store>) entityManager.createQuery(hql).setParameter(1, id).getResultList();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -93,9 +101,30 @@ public class StoreDao implements IStoreDao {
 	}
 
 	@Override
-
 	public List<StoreLike> getStoreLikes(int storeId) {
 		String hql = "select store.storeLikes From Store as store where store.id= ?";
 		return entityManager.createQuery(hql).setParameter(1, storeId).getResultList();
+	}
+	
+	
+	@Override 
+	public StoreLike likeExist(int userId, int storeId) {
+		String hql = "From StoreLike as storeLike where storeLike.user.id= ? and storeLike.store.id = ?";
+		try {
+		return (StoreLike) entityManager.createQuery(hql).setParameter(1, userId).setParameter(2, storeId)
+				.getSingleResult();
+		}catch (Exception e) {
+			return null;
+		}
+	}
+	
+	@Override
+	public void removeLike(StoreLike store) {
+		entityManager.remove(store);
+	}
+
+	@Override
+	public void addLike(StoreLike store) {
+		entityManager.persist(store);
 	}
 }

@@ -47,7 +47,7 @@ public class StoreLike implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(cascade=CascadeType.ALL,fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JsonManagedReference
 	@JoinColumn(name = "store_id")
 	public Store getStore() {
@@ -58,7 +58,7 @@ public class StoreLike implements java.io.Serializable {
 		this.store = store;
 	}
 
-	@ManyToOne(cascade=CascadeType.ALL,fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JsonManagedReference
 	@JoinColumn(name = "user_id")
 	public User getUser() {

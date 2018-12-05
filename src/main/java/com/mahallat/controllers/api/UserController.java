@@ -10,6 +10,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -57,6 +58,18 @@ public class UserController {
 		response.put("status", "user has been registered");
 
 		return new ResponseEntity<HashMap>(response, HttpStatus.CREATED);
+	}
+	
+	
+	@GetMapping("user-details")
+	public ResponseEntity<HashMap> userDetails(){
+
+		HashMap<String, Object> response = new HashMap<>();
+		User user = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+		user.setRoles(null);
+		response.put("success", "user found");
+		response.put("data", user);
+		return new ResponseEntity<HashMap>(response, HttpStatus.OK);
 	}
 	
 	@ResponseStatus(HttpStatus.BAD_REQUEST)

@@ -9,6 +9,7 @@ import com.mahallat.entity.StoreRating;;
 
 public interface IStoreDao{
 	List<Store> getAllStores();
+	List<Store> getStoresByCategory(int id);
 	Store one(int id);
 	Store storeByUserId(int id);
 	void save (Store store);
@@ -18,4 +19,9 @@ public interface IStoreDao{
 	List<StoreRating> ratingExist(int userId, int storeId);
 	boolean userHasStore(int id);
 	List<StoreLike> getStoreLikes(int storeId);
+	
+	StoreLike likeExist(int userId,int storeId);
+	void addLike(StoreLike store);
+	void removeLike(StoreLike store);
+	
 }

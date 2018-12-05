@@ -21,6 +21,10 @@ public class StoreService implements IStoreService {
 	public List<Store> getAllStores() {
 		return storeDAO.getAllStores();
 	}
+	@Override
+	public List<Store> getStoresByCategory(int id) {
+		return storeDAO.getStoresByCategory(id);
+	}
 
 	@Override
 	public Store one(int id) {
@@ -68,6 +72,21 @@ public class StoreService implements IStoreService {
 	@Override 
 	public List<StoreLike> storeLikes(int storeId){
 		return storeDAO.getStoreLikes(storeId);
+	}
+	
+	@Override
+	public StoreLike likeExist(int userId,int storeId) {
+		return storeDAO.likeExist(userId,storeId);
+	}
+	
+	@Override
+	public void addLike(StoreLike store) {
+		storeDAO.addLike(store);
+	}
+	
+	@Override
+	public void removeLike(StoreLike store) {
+		storeDAO.removeLike(store);
 	}
 	
 }

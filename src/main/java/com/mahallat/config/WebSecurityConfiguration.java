@@ -81,10 +81,16 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter{
 				.antMatchers("/api/product/likes/**").permitAll()
 				.antMatchers("/api/product/**").permitAll()
 				.antMatchers("/api/categories").permitAll()
+				.antMatchers("/api/category/**").permitAll()
 				.antMatchers("/login").permitAll()
 				.antMatchers("/").permitAll()
 				.antMatchers("/registration").permitAll()
 				.antMatchers("/api/product/rate").hasAuthority("MOBILE").anyRequest().authenticated()
+				.antMatchers("/api/product/like").hasAuthority("MOBILE").anyRequest().authenticated()
+				.antMatchers("/api/store/like").hasAuthority("MOBILE").anyRequest().authenticated()
+				.antMatchers("/api/product/get-favorite").hasAuthority("MOBILE").anyRequest().authenticated()
+				.antMatchers("/api/product/add-favorite").hasAuthority("MOBILE").anyRequest().authenticated()
+				.antMatchers("/api/user-details").hasAuthority("MOBILE").anyRequest().authenticated()
 				.antMatchers("/api/comment/add").hasAuthority("MOBILE").anyRequest().authenticated()
 				.antMatchers("/admin/**").hasAuthority("ADMIN,STORE").anyRequest().authenticated()
 				.and().formLogin()
@@ -97,7 +103,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter{
 				.passwordParameter("password")
 				.and().logout()
 				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-				.logoutSuccessUrl("/").and().exceptionHandling()
+				.logoutSuccessUrl("/").invalidateHttpSession(true).deleteCookies("JSESSIONID").and().exceptionHandling()
 				.accessDeniedPage("/access-denied").and().httpBasic();
 	}
 	
