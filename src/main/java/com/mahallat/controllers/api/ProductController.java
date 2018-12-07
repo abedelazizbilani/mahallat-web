@@ -152,7 +152,7 @@ public class ProductController {
 		User user = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
 		HashMap<String, Object> response = new HashMap<String, Object>();
 		List<FavoriteProduct> favoriteProducts = productService.favorites(user.getId());
-
+		
 		response.put("status", "success");
 		response.put("data", favoriteProducts);
 		return new ResponseEntity<HashMap>(response, HttpStatus.OK);

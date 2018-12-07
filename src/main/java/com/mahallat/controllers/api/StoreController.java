@@ -75,6 +75,23 @@ public class StoreController {
 	@GetMapping("stores")
 	public ResponseEntity<List<Store>> getAllStores() {
 		List<Store> list = storeService.getAllStores();
+		
+		User user = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+		list.forEach(store -> {
+			IntSummaryStatistics stats = store.getStoreRatings().stream().mapToInt((x) -> x.getRate())
+					.summaryStatistics();
+
+			if (user != null) {
+				List<StoreRating> storeRatings = storeService.ratingExist(user.getId(), store.getId());
+				store.rated = storeRatings.size() > 0 ? true : false;
+				store.rate = storeRatings.isEmpty() ? 0 : storeRatings.get(0).getRate();
+				store.liked = storeService.storeLikes(store.getId()).size() > 0 ? true : false;
+				
+			}
+			store.likeCount = store.getStoreLikes().size();
+			store.averageRating = stats.getAverage();
+		});
+		
 		return new ResponseEntity<List<Store>>(list, HttpStatus.OK);
 	}
 
